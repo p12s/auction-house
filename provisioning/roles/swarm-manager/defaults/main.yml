@@ -1,0 +1,4 @@
+certbot_email: mail@p12s.online
+certbot_hosts:
+    - auction.p12s.online
+    - api.auction.p12s.online
