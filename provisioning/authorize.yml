@@ -1,7 +1,7 @@
 ---
 -   name: Add authorized key
-    hosts: manager
-    remote_user: root
+    hosts: swarm-manager
+    remote_user: ubuntu
     vars_prompt:
         -   name: file
             prompt: "Public key file"
@@ -9,6 +9,7 @@
             default: "~/Dropbox/keys/yandex/id_rsa_yandex.pub"
     tasks:
         -   name: Add user authorized key
+            become: yes
             authorized_key:
                 user: deploy
                 key: "{{ lookup('file', file) }}"

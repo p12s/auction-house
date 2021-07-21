@@ -1,5 +1,6 @@
 ---
 -   name: Add Certbot hook
+    become: yes
     lineinfile:
         path: /etc/letsencrypt/cli.ini
         regexp: "^post-hook"

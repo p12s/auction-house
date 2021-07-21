@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Auction is awesome!</title>
+</head>
+<body>
+    <div id="app" class="app">
+        <h1>Auction</h1>
+        <p>start soon</p>
+        <button id="button" class="button">Click me to check API connection</button>
+        <h2 id="result">😴</h2>
+
+        <script>
+          function checkApiConnection() {
+            document.getElementById('result').innerHTML = '';
+
+            const Http = new XMLHttpRequest();
+            Http.open("GET", 'http://localhost:8081/health');
+            Http.onload = (e) => {
+              let resultTag = document.getElementById('result');
+              if (Http.status === 200) {
+                resultTag.appendChild(document.createTextNode('API connection is ✅: '+Http.response));
+              } else {
+                resultTag.appendChild(document.createTextNode('API connection is ❌'));
+              }
+            }
+            Http.send();
+          }
+
+          function clearStatus() {
+            document.getElementById('result').innerHTML = '😴';
+          }
+
+          let button = document.getElementById("button");
+          button.addEventListener("click",function(e){
+            checkApiConnection();
+            setTimeout(function () {
+              clearStatus();
+            }, 3000);
+          },false);
+        </script>
+    </div>
+</body>
+</html>

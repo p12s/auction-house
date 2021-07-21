@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  gateway:
+    build:
+      context: ./
+      dockerfile: ./gateway/docker/development/nginx/Dockerfile
+    networks:
+      - auction
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "8081:8081"
+      - "8082:8082"
+    depends_on:
+      - frontend
+  frontend:
+    build:
+      context: ./
+      dockerfile: ./frontend/docker/development/nginx/Dockerfile
+    networks:
+      - auction
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - api
+  api:
+    build:
+      context: ./
+      dockerfile: ./api/docker/development/nginx/Dockerfile
+    networks:
+      - auction
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: 1
+      FRONTEND_URL: http://frontend:8080
+      DB_DRIVER: postgres
+      DB_USERNAME: postgres
+      DB_USER: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DBNAME: postgres
+      DB_NAME: postgres
+      DB_PASSWORD: qwerty
+      DB_SSLMODE: disable
+      API_PORT: 8081
+#    volumes:
+#      - ./api:/app
+#    secrets:
+#      - jwt_public_key
+#      - jwt_private_key
+    command: sh -c "service nginx restart && ./auction-house-api-app"
+
+networks:
+  auction:
+
+# для чего эти ноды? если пхп-шное - попробовать оботись без
+#  frontend-node:
+#    build:
+#      context: frontend/docker/development/node
+#    volumes:
+#      - ./frontend:/app
+#    command: sh -c "until [ -f .ready ] ; do sleep 1 ; done && yarn start"
+#    tty: true
+#
+#  frontend-node-cli:
+#    build:
+#      context: frontend/docker/development/node
+#    volumes:
+#      - ./frontend:/app
+#  api-postgres:
+#    image: postgres:13.3-alpine
+#    environment:
+#      POSTGRES_USER: app
+#      POSTGRES_PASSWORD: secret
+#      POSTGRES_DB: app
+#    volumes:
+#      - api-postgres:/var/lib/postgresql/data
+#    ports:
+#      - "54321:5432"
+#
+#  mailer:
+#    image: mailhog/mailhog
+#
+#  cucumber-node-cli:
+#    build:
+#      context: cucumber/docker/development/node
+#    volumes:
+#      - ./cucumber:/app
+#
+#secrets:
+#  jwt_public_key:
+#    file: ./docker/development/secrets/jwt_public.key
+#  jwt_private_key:
+#    file: ./docker/development/secrets/jwt_private.key
+#
+#volumes:
+#  api-postgres:

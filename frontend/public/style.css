@@ -1,0 +1,23 @@
+body {
+    background-color: aliceblue;
+    font-size: 30px;
+}
+.app {
+    width: 500px;
+    margin: 50px auto 0 auto;
+}
+
+.link {
+  text-decoration: none;
+}
+.button {
+  width: 600px;
+  font-size: 25px;
+  line-height: 30px;
+  background-color: bisque;
+  box-shadow: none;
+  border: 2px solid sienna!important;
+  border-radius: 5px;
+  cursor: pointer;
+}
+

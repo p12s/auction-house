@@ -12,7 +12,7 @@
 *.vdi
 **/.DS_Store
 .env
-configs/config.yml
+api/configs/config.yml
 
 # User-specific stuff
 .idea/**/workspace.xml

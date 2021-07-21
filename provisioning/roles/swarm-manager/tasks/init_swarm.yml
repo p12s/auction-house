@@ -1,10 +1,42 @@
 ---
--   name: Init Swarm
-    docker_swarm:
-        advertise_addr: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2377"
-        state: present
-    register: swarm_init_result
+-   name: Check if Swarm has already been Initialized
+    become: yes
+    shell: docker node ls
+    register: swarm_status
+    ignore_errors: true
+    tags: swarm
 
--   name: Store worker join token
-    set_fact:
-        worker_join_token: "{{ swarm_init_result.swarm_facts.JoinTokens.Worker }}"
+# -   name: Init Swarm
+#     become: yes
+#     vars:
+#         ansible_python_interpreter: /bin/python3
+#     docker_swarm:
+#         advertise_addr: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2377"
+#         state: present
+#     register: swarm_init_result
+
+# -   name: Store worker join token
+#     become: yes
+#     set_fact:
+#         worker_join_token: "{{ swarm_init_result.swarm_facts.JoinTokens.Worker }}"
+
+-   name: Initialize Docker Swarm
+    become: yes
+    shell: >
+        docker swarm init
+        --advertise-addr={{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2377
+    when: swarm_status.rc != 0
+    run_once: true
+    tags: swarm
+
+-   name: Get the Manager join-token
+    become: yes
+    shell: docker swarm join-token --quiet manager
+    register: manager_token
+    tags: swarm
+
+-   name: Get the worker join-token
+    become: yes
+    shell: docker swarm join-token --quiet worker
+    register: worker_token
+    tags: swarm

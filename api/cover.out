@@ -1,0 +1,8 @@
+mode: set
+github.com/p12s/auction-house/api/main.go:10.13,19.16 5 0
+github.com/p12s/auction-house/api/main.go:24.2,24.48 1 0
+github.com/p12s/auction-house/api/main.go:19.16,22.3 2 0
+github.com/p12s/auction-house/api/main.go:28.58,33.16 4 1
+github.com/p12s/auction-house/api/main.go:33.16,35.3 1 0
+github.com/p12s/auction-house/api/main.go:38.53,43.16 4 1
+github.com/p12s/auction-house/api/main.go:43.16,45.3 1 0

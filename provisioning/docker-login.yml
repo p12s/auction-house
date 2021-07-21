@@ -1,9 +1,8 @@
 ---
 -   name: Log into private registry
     hosts: manager
-    remote_user: root
-    become: yes
-    become_user: deploy
+    remote_user: ubuntu
+    #become_user: deploy
     vars_prompt:
         -   name: registry
             prompt: "Registry"
@@ -15,4 +14,7 @@
             prompt: "Password"
     tasks:
         -   name: Log into private registry
-            shell: "docker login -u {{ username }} -p '{{ password }}' {{ registry }}"
+            become: yes
+            shell: "echo {{ password }} | docker login -u {{ username }} --password-stdin {{ registry }}"
+
+# ${{ secrets.CR_PAT }}

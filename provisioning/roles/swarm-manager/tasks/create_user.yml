@@ -1,5 +1,6 @@
 ---
 -   name: Create deploy user
+    become: yes
     user:
         name: deploy
         password: '!'
