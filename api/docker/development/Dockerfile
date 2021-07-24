@@ -24,7 +24,7 @@ FROM amd64/alpine:3
 
 RUN apk update && apk upgrade && apk add bash && apk add --no-cache curl && apk add lsof
 
-#COPY ./docker/production/nginx/conf.d /etc/nginx/conf.d
+#COPY ./api/docker/development/nginx/conf.d /etc/nginx/conf.d
 
 COPY --from=build /auction-house-api-app /auction-house-api-app
 COPY ./configs /configs

@@ -1,5 +1,5 @@
 site:
-	ansible-playbook -i hosts.yml site.yml -vvv
+	ansible-playbook -i hosts.yml site.yml -v
 
 upgrade:
 	ansible-playbook -i hosts.yml upgrade.yml -v
@@ -17,4 +17,4 @@ authorize-deploy:
 	ansible-playbook -i hosts.yml authorize-deploy.yml -v
 
 docker-login:
-	ansible-playbook -i hosts.yml docker-login.yml -vvv
+	ansible-playbook -i hosts.yml docker-login.yml -v

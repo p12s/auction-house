@@ -1,14 +1,11 @@
 #FROM nginx:1.21-alpine
 FROM nginx:latest
 
-LABEL "project"="auction-house"
-LABEL "part"="gateway"
-
 # RUN apk add --no-cache curl
 RUN apt-get update && apt-get upgrade && apt-get install -y curl lsof
 
-COPY ./gateway/docker/common/nginx/snippets /etc/nginx/snippets
-COPY ./gateway/docker/development/nginx/conf.d /etc/nginx/conf.d
+COPY ./docker/common/nginx/snippets /etc/nginx/snippets
+COPY ./docker/development/nginx/conf.d /etc/nginx/conf.d
 
 WORKDIR /app
 

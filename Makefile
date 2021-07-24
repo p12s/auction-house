@@ -114,84 +114,85 @@ frontend-test-watch:
 	docker-compose run --rm frontend-node-cli yarn test
 
 
-# ========================== DOCKER IMAGES BUILD
-build-gateway:
+# ========================== BUILD DEVELOPMENT DOCKER IMAGES 
+dev-build-gateway:
+	docker --log-level=debug build --pull --file=gateway/docker/development/nginx/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-gateway:${IMAGE_TAG} gateway
+
+dev-build-frontend:
+	docker --log-level=debug build --pull --file=frontend/docker/development/nginx/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-frontend:${IMAGE_TAG} frontend
+
+dev-build-api:
+	docker --log-level=debug build --pull --file=api/docker/development/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-api:${IMAGE_TAG} api
+
+dev-build: dev-build-gateway dev-build-frontend dev-build-api
+
+try-dev-build:
+	make dev-build
+
+try-dev-deploy:
+	docker stack deploy --compose-file docker-compose-swarm.yml auction --with-registry-auth --prune
+
+
+# ========================== BUILD PROD DOCKER IMAGES 
+build-prod-gateway:
 	docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-gateway:${IMAGE_TAG} gateway
 	docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-gateway:latest gateway
 
-build-frontend:
+build-prod-frontend:
 	docker --log-level=debug build --pull --file=frontend/docker/production/nginx/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-frontend:${IMAGE_TAG} frontend
 	docker --log-level=debug build --pull --file=frontend/docker/production/nginx/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-frontend:latest frontend
 
-build-api:
+build-prod-api:
 	docker --log-level=debug build --pull --file=api/docker/production/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-api:${IMAGE_TAG} api
 	docker --log-level=debug build --pull --file=api/docker/production/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-api:latest api
 
-build: build-gateway build-frontend build-api
+build-prod: build-prod-gateway build-prod-frontend build-prod-api
 
-try-build:
-	REGISTRY=ghcr.io LOGIN=p12s make build
+try-build-prod:
+	make build-prod
 
 
 # ========================== DOCKER IMAGES PUSH
-push-gateway:
+push-prod-gateway:
 	docker push ${REGISTRY}/${LOGIN}/auction-gateway:${IMAGE_TAG}
 	docker push ${REGISTRY}/${LOGIN}/auction-gateway:latest
 
-push-frontend:
+push-prod-frontend:
 	docker push ${REGISTRY}/${LOGIN}/auction-frontend:${IMAGE_TAG}
 	docker push ${REGISTRY}/${LOGIN}/auction-frontend:latest
 
-push-api:
+push-prod-api:
 	docker push ${REGISTRY}/${LOGIN}/auction-api:${IMAGE_TAG}
 	docker push ${REGISTRY}/${LOGIN}/auction-api:latest
 
-push: push-gateway push-frontend push-api
+push-prod: push-prod-gateway push-prod-frontend push-prod-api
 
-try-push:
-	REGISTRY=ghcr.io LOGIN=p12s make push
+try-push-prod:
+	make push-prod
 
 
 # ========================== DEPLOY PROD
-
-# HOST=auction.p12s.online PORT=22 REGISTRY=ghcr.io LOGIN=p12s IMAGE_TAG=v0.0.5 BUILD_NUMBER=v0.0.5 make deploy-1
-
-deploy:
-	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'rm -rf site_${BUILD_NUMBER}'
-	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'mkdir site_${BUILD_NUMBER}'
+deploy-prod:
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'rm -rf site_${IMAGE_TAG}'
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'mkdir site_${IMAGE_TAG}'
 
 	envsubst < docker-compose-production.yml > docker-compose-production-env.yml
-	scp -o StrictHostKeyChecking=no -P ${PORT} docker-compose-production-env.yml deploy@${HOST}:site_${BUILD_NUMBER}/docker-compose.yml
+	scp -o StrictHostKeyChecking=no -P ${PORT} docker-compose-production-env.yml deploy@${HOST}:site_${IMAGE_TAG}/docker-compose.yml
 	rm -f docker-compose-production-env.yml
 
-	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'mkdir site_${BUILD_NUMBER}/secrets'
-#	scp -o StrictHostKeyChecking=no -P ${PORT} ${JWT_PUBLIC_KEY} deploy@${HOST}:site_${BUILD_NUMBER}/secrets/jwt_public.key
-#	scp -o StrictHostKeyChecking=no -P ${PORT} ${JWT_PRIVATE_KEY} deploy@${HOST}:site_${BUILD_NUMBER}/secrets/jwt_private.key
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'mkdir site_${IMAGE_TAG}/secrets'
+#	scp -o StrictHostKeyChecking=no -P ${PORT} ${JWT_PUBLIC_KEY} deploy@${HOST}:site_${IMAGE_TAG}/secrets/jwt_public.key
+#	scp -o StrictHostKeyChecking=no -P ${PORT} ${JWT_PRIVATE_KEY} deploy@${HOST}:site_${IMAGE_TAG}/secrets/jwt_private.key
 
-	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'cd site_${BUILD_NUMBER} && docker stack deploy --compose-file docker-compose.yml auction --with-registry-auth --prune'
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'cd site_${IMAGE_TAG} && docker stack deploy --compose-file docker-compose.yml auction --with-registry-auth --prune'
 
-deploy-clean:
+deploy-prod-clean:
 	rm -f docker-compose-production-env.yml
 
-rollback:
-	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'cd site_${BUILD_NUMBER} && docker stack deploy --compose-file docker-compose.yml auction --with-registry-auth --prune'
+rollback-prod:
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'cd site_${IMAGE_TAG} && docker stack deploy --compose-file docker-compose.yml auction --with-registry-auth --prune'
 
 # ==========================
 
 docker-rmi:
-	docker rmi ghcr.io/p12s/auction-api:${IMAGE_TAG} ghcr.io/p12s/auction-gateway:${IMAGE_TAG} ghcr.io/p12s/auction-frontend:${IMAGE_TAG}
-
-#========== API ghcr.io/p12s
-#docker --log-level=debug build --pull --file=api/docker/production/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-api:${IMAGE_TAG} api
-#docker push ${REGISTRY}/${LOGIN}/auction-api:${IMAGE_TAG}
-#==========
-#
-#========== FRONTEND
-#docker --log-level=debug build --pull --file=frontend/docker/production/nginx/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-frontend:${IMAGE_TAG} frontend
-#docker push ${REGISTRY}/${LOGIN}/auction-frontend:${IMAGE_TAG}
-#==========
-#
-#========== GATEWAY
-#docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-gateway:${IMAGE_TAG} gateway
-#docker push ${REGISTRY}/${LOGIN}/auction-gateway:${IMAGE_TAG}
-#==========
+	docker rmi ${REGISTRY}/${LOGIN}/auction-api:${IMAGE_TAG} ${REGISTRY}/${LOGIN}/auction-gateway:${IMAGE_TAG} ${REGISTRY}/${LOGIN}/auction-frontend:${IMAGE_TAG}

@@ -22,16 +22,3 @@ swag:
 lint:
 	golangci-lint run
 
-
-dc-init: dc-clear dc-pull dc-build dc-up # команда для первоначального запуска в системе
-dc-up:
-	docker-compose --env-file ./.env up -d
-dc-down:
-	docker-compose --env-file ./.env down --remove-orphans # будет останавливать все контейнеры с префиксом (default - название папки, .env - COMPOSE_PROJECT_NAME), даже если что-то по-ошибке удалено из docker-compose
-dc-clear:
-	docker-compose --env-file ./.env down -v --remove-orphans # полная очистка с удалением volumes
-dc-pull:
-	docker-compose --env-file ./.env pull
-dc-build:
-	docker-compose --env-file ./.env build
-

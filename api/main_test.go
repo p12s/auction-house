@@ -5,6 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 )
+
 func TestHelloServer(t *testing.T) {
 	tests := []struct {
 		name           string

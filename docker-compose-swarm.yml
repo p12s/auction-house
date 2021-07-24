@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+    gateway:
+        image: ${REGISTRY}/${LOGIN}/auction-gateway:${IMAGE_TAG}
+        volumes:
+            - /var/www/html:/var/www/html:ro
+        ports:
+            - "80:80"
+            - "8080:8080"
+            - "8081:8081"
+            - "8082:8082"
+        deploy:
+            mode: replicated
+            replicas: 1
+            update_config:
+                parallelism: 1
+                delay: 10s
+            placement:
+                constraints: [node.role == manager]
+
+    frontend:
+        image: ${REGISTRY}/${LOGIN}/auction-frontend:${IMAGE_TAG}
+        deploy:
+            mode: replicated
+            replicas: 1
+            update_config:
+                parallelism: 1
+                delay: 10s
+
+    api:
+        image: ${REGISTRY}/${LOGIN}/auction-api:${IMAGE_TAG}
+        deploy:
+            mode: replicated
+            replicas: 1
+            update_config:
+                parallelism: 1
+                delay: 5s
