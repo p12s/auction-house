@@ -9,13 +9,13 @@
         - certbot
         - swarm-manager
 
-#-   name: Provision worker
-#    hosts: workers
-#    remote_user: root
-#    roles:
-#        - swap
-#        - docker
-#        - swarm-worker
+-   name: Provision worker
+    hosts: workers
+    remote_user: ubuntu
+    roles:
+        #- swap
+        - docker
+        - swarm-worker
 
 #-   name: Set labels
 #    hosts: manager

@@ -124,10 +124,10 @@ dev-build-frontend:
 dev-build-api:
 	docker --log-level=debug build --pull --file=api/docker/development/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-api:${IMAGE_TAG} api
 
-dev-build: dev-build-gateway dev-build-frontend dev-build-api
+dev-build-db:
+	docker --log-level=debug build --pull --file=db/docker/development/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-db:${IMAGE_TAG} db
 
-try-dev-build:
-	make dev-build
+try-dev-build: dev-build-gateway dev-build-frontend dev-build-api dev-build-db
 
 try-dev-deploy:
 	docker stack deploy --compose-file docker-compose-swarm.yml auction --with-registry-auth --prune

@@ -8,11 +8,11 @@ RUN yarn install && yarn cache clean
 COPY ./ ./
 #RUN yarn build
 
-#FROM nginx:1.21-alpine
-FROM nginx:latest
+FROM nginx:1.21-alpine
+#FROM nginx:latest
 
-#RUN apk add --no-cache curl
-RUN apt-get update && apt-get upgrade -y && apt-get install -y curl lsof
+RUN apk add --no-cache curl
+#RUN apt-get update && apt-get upgrade -y && apt-get install -y curl lsof
 
 COPY docker/production/nginx/conf.d /etc/nginx/conf.d
 

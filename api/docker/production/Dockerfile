@@ -10,7 +10,6 @@ COPY ./go.mod ./go.sum /app/
 RUN go mod download
 
 COPY ./ /app/
-COPY ./.env /app/
 # Build the binary
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags netgo -a -v -o /auction-house-api-app ./main.go
 
@@ -19,20 +18,17 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags netgo -a -v -o /auction
 #FROM nginx:latest
 FROM amd64/alpine:3
 
-# RUN apk add --no-cache curl
+RUN apk add --no-cache curl
 # RUN apt-get update && apt-get upgrade -y && apt-get install -y curl lsof
-
-RUN apk update && apk upgrade && apk add bash && apk add --no-cache curl && apk add lsof
+#RUN apk update && apk upgrade && apk add bash && apk add --no-cache curl && apk add lsof
 
 #COPY ./docker/production/nginx/conf.d /etc/nginx/conf.d
 
 COPY --from=build /auction-house-api-app /auction-house-api-app
 COPY ./configs /configs
 #COPY ./wait-for-api.sh ./
-EXPOSE 8081
 
 WORKDIR /
-RUN chmod +x auction-house-api-app
 
 CMD ["./auction-house-api-app"]
 

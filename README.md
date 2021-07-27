@@ -30,6 +30,7 @@ COMPOSE_PROJECT_NAME=auction docker-compose up -d
 - ✅ Язык:  Go (желательно) или PHP
   **Go**
 - ❌ Использование очередей (например, RabbitMQ)
+- ✅ Логирование ошибок на проде с помощью [Sentry](https://sentry.io) (на реальном продакшене можно использовать платный аккаунт, либо развернуть этот сервис на [своей виртуалке](https://develop.sentry.dev/self-hosted/))
 
 ## Усложнения
 - ❌ Предоставление API на websocket

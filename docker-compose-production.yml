@@ -1,15 +1,5 @@
 version: "3.8"
 services:
-#    swarm-cronjob:
-#        image: crazymax/swarm-cronjob:latest
-#        volumes:
-#            - /var/run/docker.sock:/var/run/docker.sock
-#        environment:
-#            LOG_LEVEL: info
-#        deploy:
-#            placement:
-#                constraints: [node.role == manager]
-
     gateway:
         image: ${REGISTRY}/${LOGIN}/auction-gateway:${IMAGE_TAG}
         volumes:
@@ -38,95 +28,19 @@ services:
 
     api:
         image: ${REGISTRY}/${LOGIN}/auction-api:${IMAGE_TAG}
+        environment:
+            APP_ENV: prod
+            APP_DEBUG: 0
+            API_PORT: 8081
+            SENTRY_DSN: ${SENTRY_DSN}
+        volumes:
+            - ./secrets:/run/secrets:ro
         deploy:
             mode: replicated
             replicas: 1
             update_config:
                 parallelism: 1
                 delay: 5s
-
-#    api-migration:
-#        image: ${REGISTRY}/${LOGIN}/auction-api-php-cli:${IMAGE_TAG}
-#        environment:
-#            APP_ENV: prod
-#            APP_DEBUG: 0
-#            DB_HOST: api-postgres
-#            DB_USER: app
-#            DB_PASSWORD: ${API_DB_PASSWORD}
-#            DB_NAME: app
-#            MAILER_HOST: ${API_MAILER_HOST}
-#            MAILER_PORT: ${API_MAILER_PORT}
-#            MAILER_USER: ${API_MAILER_USER}
-#            MAILER_PASSWORD: ${API_MAILER_PASSWORD}
-#            MAILER_ENCRYPTION: tls
-#            MAILER_FROM_EMAIL: ${API_MAILER_FROM_EMAIL}
-#            FRONTEND_URL: https://auction.p12s.online
-#            SENTRY_DSN: ${SENTRY_DSN}
-#            JWT_ENCRYPTION_KEY: ${JWT_ENCRYPTION_KEY}
-#            JWT_PUBLIC_KEY_PATH: /run/secrets/jwt_public_key
-#            JWT_PRIVATE_KEY_PATH: /run/secrets/jwt_private_key
-#        secrets:
-#            - jwt_public_key
-#            - jwt_private_key
-#        command: sh -c 'wait-for-it api-postgres:5432 -t 60 && php bin/app.php migrations:migrate --no-interaction'
-#        deploy:
-#            restart_policy:
-#                condition: on-failure
-#                delay: 5s
-#                max_attempts: 5
-#                window: 120s
-#
-#    api-oauth-clear-expired:
-#        image: ${REGISTRY}/${LOGIN}/auction-api-php-cli:${IMAGE_TAG}
-#        environment:
-#            APP_ENV: prod
-#            APP_DEBUG: 0
-#            DB_HOST: api-postgres
-#            DB_USER: app
-#            DB_PASSWORD: ${API_DB_PASSWORD}
-#            DB_NAME: app
-#            MAILER_HOST: ${API_MAILER_HOST}
-#            MAILER_PORT: ${API_MAILER_PORT}
-#            MAILER_USER: ${API_MAILER_USER}
-#            MAILER_PASSWORD: ${API_MAILER_PASSWORD}
-#            MAILER_ENCRYPTION: tls
-#            MAILER_FROM_EMAIL: ${API_MAILER_FROM_EMAIL}
-#            FRONTEND_URL: https://auction.p12s.online
-#            SENTRY_DSN: ${SENTRY_DSN}
-#            JWT_ENCRYPTION_KEY: ${JWT_ENCRYPTION_KEY}
-#            JWT_PUBLIC_KEY_PATH: /run/secrets/jwt_public_key
-#            JWT_PRIVATE_KEY_PATH: /run/secrets/jwt_private_key
-#        secrets:
-#            - jwt_public_key
-#            - jwt_private_key
-#        command: sh -c 'wait-for-it api-postgres:5432 -t 60 && php bin/app.php oauth:clear-expired'
-#        deploy:
-#            labels:
-#                - "swarm.cronjob.enable=true"
-#                - "swarm.cronjob.schedule=0 * * * *"
-#                - "swarm.cronjob.skip-running=true"
-#            replicas: 0
-#            restart_policy:
-#                condition: none
-#
-#    api-postgres:
-#        image: postgres:13.3-alpine
-#        environment:
-#            POSTGRES_USER: app
-#            POSTGRES_PASSWORD: ${API_DB_PASSWORD}
-#            POSTGRES_DB: app
-#        volumes:
-#            - api-postgres:/var/lib/postgresql/data
-#        deploy:
-#            placement:
-#                constraints: [node.labels.db == db]
-#            endpoint_mode: dnsrr
-
 #secrets:
-#    jwt_public_key:
-#        file: ./secrets/jwt_public.key
-#    jwt_private_key:
-#        file: ./secrets/jwt_private.key
-
-#volumes:
-#    api-postgres:
+#    sentry_dsn:
+#        file: ./secrets/sentry_dsn.txt

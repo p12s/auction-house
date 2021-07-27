@@ -10,7 +10,6 @@ COPY ./go.mod ./go.sum /app/
 RUN go mod download
 
 COPY ./ /app/
-COPY ./.env /app/
 # Build the binary
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags netgo -a -v -o /auction-house-api-app ./main.go
 
@@ -28,11 +27,12 @@ RUN apk update && apk upgrade && apk add bash && apk add --no-cache curl && apk 
 
 COPY --from=build /auction-house-api-app /auction-house-api-app
 COPY ./configs /configs
-#COPY ./wait-for-api.sh ./
-EXPOSE 8081
+COPY ./wait-for-postgres.sh ./
 
 WORKDIR /
-RUN chmod +x auction-house-api-app
+
+# install psql and make wait-for-postgres.sh executable
+RUN apk add --no-cache libc6-compat postgresql-client && chmod +x wait-for-postgres.sh auction-house-api-app
 
 CMD ["./auction-house-api-app"]
 

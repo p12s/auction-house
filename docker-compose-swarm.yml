@@ -26,12 +26,52 @@ services:
             update_config:
                 parallelism: 1
                 delay: 10s
+        depends_on:
+            - api
 
     api:
         image: ${REGISTRY}/${LOGIN}/auction-api:${IMAGE_TAG}
+        environment:
+            APP_ENV: dev
+            APP_DEBUG: 1
+            API_PORT: 8081
+            SENTRY_DSN: ${SENTRY_DSN}
+            POSTGRES_PASSWORD: qwerty
+            POSTGRES_PORT: 5432
+            POSTGRES_USER: postgres
+            POSTGRES_DB: postgres
+            POSTGRES_SSL_MODE: disable
+            PGDATA: /var/lib/postgresql/data/pgdata
+        volumes:
+            - ./secrets:/run/secrets:ro
         deploy:
             mode: replicated
             replicas: 1
             update_config:
                 parallelism: 1
                 delay: 5s
+        depends_on:
+            - db
+    db:
+        image: ${REGISTRY}/${LOGIN}/auction-db:${IMAGE_TAG}
+        environment:
+            POSTGRES_PASSWORD: qwerty
+            POSTGRES_USER: postgres
+            POSTGRES_DB: postgres
+            #PGDATA: /var/lib/postgresql/data/pgdata
+        volumes:
+            - ./.database/postgres/data:/var/lib/postgresql/data
+            #- postgres-data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        deploy:
+            mode: replicated
+            replicas: 1
+            update_config:
+                parallelism: 1
+                delay: 5s
+#volumes:
+#    postgres-data:
+#secrets:
+#    sentry_dsn:
+#        file: ./secrets/sentry_dsn.txt
