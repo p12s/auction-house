@@ -16,7 +16,8 @@ services:
                 delay: 10s
             placement:
                 constraints: [node.role == manager]
-
+          
+                
     frontend:
         image: ${REGISTRY}/${LOGIN}/auction-frontend:${IMAGE_TAG}
         deploy:
@@ -25,6 +26,8 @@ services:
             update_config:
                 parallelism: 1
                 delay: 10s
+        depends_on:
+            - api
 
     api:
         image: ${REGISTRY}/${LOGIN}/auction-api:${IMAGE_TAG}
@@ -33,6 +36,14 @@ services:
             APP_DEBUG: 0
             API_PORT: 8081
             SENTRY_DSN: ${SENTRY_DSN}
+            POSTGRES_HOST: db
+            POSTGRES_PASSWORD: qwerty
+            POSTGRES_PORT: 5432
+            POSTGRES_USER: postgres
+            POSTGRES_DB: postgres
+            POSTGRES_SSL_MODE: disable
+            PGDATA: /var/lib/postgresql/data
+            GIN_MODE: release
         volumes:
             - ./secrets:/run/secrets:ro
         deploy:
@@ -41,6 +52,29 @@ services:
             update_config:
                 parallelism: 1
                 delay: 5s
+        depends_on:
+            - db
+    db:
+        image: ${REGISTRY}/${LOGIN}/auction-db:${IMAGE_TAG}
+        environment:
+            POSTGRES_PASSWORD: qwerty
+            POSTGRES_USER: postgres
+            POSTGRES_DB: postgres
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        ports:
+            - "5432:5432" #  если на проде ок - попробовать удалить - прокатит по названию без порта?
+        deploy:
+            mode: replicated
+            replicas: 1
+            update_config:
+                parallelism: 1
+                delay: 5s
+
+volumes:
+    pgdata:
+
 #secrets:
 #    sentry_dsn:
 #        file: ./secrets/sentry_dsn.txt
+

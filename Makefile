@@ -146,7 +146,11 @@ build-prod-api:
 	docker --log-level=debug build --pull --file=api/docker/production/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-api:${IMAGE_TAG} api
 	docker --log-level=debug build --pull --file=api/docker/production/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-api:latest api
 
-build-prod: build-prod-gateway build-prod-frontend build-prod-api
+build-prod-db:
+	docker --log-level=debug build --pull --file=db/docker/production/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-db:${IMAGE_TAG} db
+	docker --log-level=debug build --pull --file=db/docker/production/Dockerfile --tag=${REGISTRY}/${LOGIN}/auction-db:latest db
+
+build-prod: build-prod-gateway build-prod-frontend build-prod-api  build-prod-db
 
 try-build-prod:
 	make build-prod
@@ -165,7 +169,11 @@ push-prod-api:
 	docker push ${REGISTRY}/${LOGIN}/auction-api:${IMAGE_TAG}
 	docker push ${REGISTRY}/${LOGIN}/auction-api:latest
 
-push-prod: push-prod-gateway push-prod-frontend push-prod-api
+push-prod-db:
+	docker push ${REGISTRY}/${LOGIN}/auction-db:${IMAGE_TAG}
+	docker push ${REGISTRY}/${LOGIN}/auction-db:latest
+
+push-prod: push-prod-gateway push-prod-frontend push-prod-api push-prod-db
 
 try-push-prod:
 	make push-prod

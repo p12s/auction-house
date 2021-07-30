@@ -2,7 +2,7 @@ package repository
 
 import (
 	"github.com/jmoiron/sqlx"
-	"github.com/p12s/auction-house/api"
+	"github.com/p12s/auction-house/api/common"
 )
 
 type Authorization interface {

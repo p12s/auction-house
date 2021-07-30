@@ -12,6 +12,7 @@ type errorResponse struct {
 type statusResponse struct {
 	Status string `json:"status"`
 }
+
 // TODO припаять sentry
 func newErrorResponse(c *gin.Context, statusCode int, message string) {
 	logrus.Error(message)

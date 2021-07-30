@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="style.css">
+  <title>Sign up</title>
+</head>
+<body>
+  <div id="app" class="app">
+    <h1>💩💩💩</h1>
+    <form id="sign-up" action="#">
+      <label class="sign-up-label">Имя: <input name="name" type="text" id="name" class="sign-up-input" required></label>
+      <label class="sign-up-label">Email: <input name="email" type="email" id="email" class="sign-up-input" required></label>
+      <label class="sign-up-label">Логин: <input name="login" type="text" id="login" class="sign-up-input" required></label>
+      <label class="sign-up-label">Пароль: <input name="password" type="password" id="password" class="sign-up-input" required></label>
+      <button type="submit" id="button" class="button">Click me to check DB connection</button>
+    </form>
+    <h2>Результат: <span id="result">😴</span></h2>
+    <script>
+      function sendForm() {
+        document.getElementById('result').innerHTML = '';
+
+        const Http = new XMLHttpRequest();
+        Http.upload.addEventListener("error", transferFailed, false);
+
+        Http.onreadystatechange = function(){
+          if (Http.readyState === 4) {
+            let resultTag = document.getElementById('result');
+            if(Http.status === 200) {
+              resultTag.appendChild(document.createTextNode('Sing-up say: '+Http.response));
+            } else {
+              resultTag.appendChild(document.createTextNode('Sing-up dosn\'t work 👎'));
+            }
+          }
+          console.log('end.')
+        }
+
+        let json = JSON.stringify({
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          username: document.getElementById('login').value,
+          password: document.getElementById('password').value
+        });
+        let apiHref = document.location.protocol + '//'+ document.location.host + '/api' + '/auth/sign-up'
+        Http.open("POST", apiHref, true)
+        Http.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+        Http.send(json);
+        console.table(json);
+      }
+
+      function transferFailed() {
+        console.log('fail')
+        document.getElementById('result').innerHTML = 'FAIL!';
+      }
+
+      function clearStatus() {
+        document.getElementById('result').innerHTML = '😴';
+      }
+
+      const form = document.getElementById('sign-up');
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        console.log('sending...');
+        sendForm();
+        setTimeout(function () {
+          clearStatus();
+        }, 5000);
+      },false);
+    </script>
+  </div>
+</body>
+</html>
+
+
+

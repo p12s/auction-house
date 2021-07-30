@@ -2,10 +2,7 @@ package main
 
 import (
 	"context"
-	"github.com/getsentry/sentry-go"
-	"github.com/p12s/auction-house/api/pkg/handler"
-	"github.com/p12s/auction-house/api/pkg/repository"
-	"github.com/p12s/auction-house/api/pkg/service"
+	"fmt"
 	"net/http"
 	_ "net/http/pprof" // Для live профилировки
 	"os"
@@ -13,13 +10,18 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/getsentry/sentry-go"
+	"github.com/p12s/auction-house/api/pkg/handler"
+	"github.com/p12s/auction-house/api/pkg/repository"
+	"github.com/p12s/auction-house/api/pkg/service"
+
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	if os.Getenv("APP_ENV") == "prod" { // TODO обернуть в декоратор логер? если в нем переменная окружения будет определена - будет отпраляться
-		err := sentry.Init(sentry.ClientOptions {
+		err := sentry.Init(sentry.ClientOptions{
 			Dsn: os.Getenv("SENTRY_DSN"),
 		})
 		if err != nil {
@@ -30,9 +32,17 @@ func main() {
 	}
 
 	logrus.SetFormatter(new(logrus.JSONFormatter))
+
+	fmt.Println("POSTGRES_HOST:", os.Getenv("POSTGRES_HOST"))
+	fmt.Println("POSTGRES_PORT:", os.Getenv("POSTGRES_PORT"))
+	fmt.Println("POSTGRES_USER:", os.Getenv("POSTGRES_USER"))
+	fmt.Println("POSTGRES_PASSWORD:", os.Getenv("POSTGRES_PASSWORD"))
+	fmt.Println("POSTGRES_DB:", os.Getenv("POSTGRES_DB"))
+	fmt.Println("POSTGRES_SSL_MODE:", os.Getenv("POSTGRES_SSL_MODE"))
+
 	db, err := repository.NewPostgresDB(repository.Config{
 		Driver:   "postgres",
-		Host:     "db",
+		Host:     os.Getenv("POSTGRES_HOST"),
 		Port:     os.Getenv("POSTGRES_PORT"),
 		Username: os.Getenv("POSTGRES_USER"),
 		Password: os.Getenv("POSTGRES_PASSWORD"),

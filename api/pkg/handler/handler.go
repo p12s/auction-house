@@ -25,6 +25,17 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		auth.POST("/sign-up", h.signUp)
 		auth.POST("/sign-in", h.signIn)
+		// TODO отправка подтверждения на мыло
+		// TODO получение хита подтверждения мейла, подтверждение регистрации - активация польз.
+		// TODO регистрация через соц. сети
+		// TODO восстановление пароля
+		// TODO смена пароля/мейла
+	}
+
+	role := router.Group("/role")
+	{
+		role.PUT("/change", h.health)
+		// TODO смена роли польз.
 	}
 
 	api := router.Group("/api", h.userIdentity) // TODO without /api

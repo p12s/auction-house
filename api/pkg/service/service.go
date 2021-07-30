@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/p12s/auction-house/api"
+	"github.com/p12s/auction-house/api/common"
 	"github.com/p12s/auction-house/api/pkg/repository"
 )
 

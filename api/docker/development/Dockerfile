@@ -19,11 +19,8 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags netgo -a -v -o /auction
 FROM amd64/alpine:3
 
 # RUN apk add --no-cache curl
-# RUN apt-get update && apt-get upgrade -y && apt-get install -y curl lsof
-
+# RUN apt-get update && apt-get upgrade -y && apt-get install -y curl lsof  # && apk add ca-certificates wget && update-ca-certificates
 RUN apk update && apk upgrade && apk add bash && apk add --no-cache curl && apk add lsof
-
-#COPY ./api/docker/development/nginx/conf.d /etc/nginx/conf.d
 
 COPY --from=build /auction-house-api-app /auction-house-api-app
 COPY ./configs /configs

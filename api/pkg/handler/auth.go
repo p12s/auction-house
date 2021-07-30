@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/p12s/auction-house/api"
+	"github.com/p12s/auction-house/api/common"
 	"net/http"
 )
 
@@ -38,8 +38,8 @@ func (h *Handler) signUp(c *gin.Context) {
 }
 
 type signInInput struct {
-	Username 	string 	`json:"username" binding:"required"`
-	Password 	string 	`json:"password" binding:"required"`
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 // @Summary SignIn

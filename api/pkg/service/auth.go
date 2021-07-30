@@ -5,14 +5,14 @@ import (
 	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/p12s/auction-house/api"
+	common2 "github.com/p12s/auction-house/api/common"
 	"github.com/p12s/auction-house/api/pkg/repository"
 	"time"
 )
 
 const (
-	salt = "Os02a[23=23fs[f3kjalsasfjasdf"
-	tokenTTL = 12 * time.Hour
+	salt       = "Os02a[23=23fs[f3kjalsasfjasdf"
+	tokenTTL   = 12 * time.Hour
 	signingKey = ")*ad@*fsdg^j(kadf*^(&le23#a0d9"
 )
 
@@ -29,7 +29,7 @@ func NewAuthService(repo repository.Authorization) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (s *AuthService) CreateUser(user common.User) (int, error) {
+func (s *AuthService) CreateUser(user common2.User) (int, error) {
 	user.Password = generatePasswordHash(user.Password)
 	return s.repo.CreateUser(user)
 }
@@ -74,6 +74,3 @@ func generatePasswordHash(password string) string {
 	hash.Write([]byte(password))
 	return fmt.Sprintf("%x", hash.Sum([]byte(salt)))
 }
-
-
-
