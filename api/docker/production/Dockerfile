@@ -23,7 +23,7 @@ FROM amd64/alpine:3
 RUN apk update && apk upgrade && apk add bash && apk add --no-cache curl && apk add lsof
 
 COPY --from=build /auction-house-api-app /auction-house-api-app
-COPY ./configs /configs
+#COPY ./configs /configs
 COPY ./wait-for-postgres.sh ./
 
 WORKDIR /
