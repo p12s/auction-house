@@ -1,9 +1,5 @@
 image: docker:latest
 
-# Use the OverlayFS driver for improved performance.
-# variables:
-#   DOCKER_DRIVER: overlay
-
 services:
   - docker:dind
 
