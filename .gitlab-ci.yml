@@ -52,18 +52,16 @@ test:
 #      - docker tag gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_SHORT_SHA gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_TAG
 #      - docker push gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_TAG
 
-deploy:
-  stage: deploy
-  script: # добавить приватный ключ, чтобы можно было подкл по 22 порту ssh
-    - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'rm -rf site_$CI_COMMIT_SHORT_SHA'
-    - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'mkdir site_$CI_COMMIT_SHORT_SHA'
-    - envsubst < docker-compose-production.yml > docker-compose-production-env.yml
-    - scp -o StrictHostKeyChecking=no -P ${PORT} docker-compose-production-env.yml deploy@${HOST}:site_$CI_COMMIT_SHORT_SHA/docker-compose.yml
-    - rm -f docker-compose-production-env.yml
-    - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'mkdir site_$CI_COMMIT_SHORT_SHA/secrets'
-#	scp -o StrictHostKeyChecking=no -P ${PORT} ${JWT_PUBLIC_KEY} deploy@${HOST}:site_$CI_COMMIT_SHORT_SHA/secrets/jwt_public.key
-#	scp -o StrictHostKeyChecking=no -P ${PORT} ${JWT_PRIVATE_KEY} deploy@${HOST}:site_$CI_COMMIT_SHORT_SHA/secrets/jwt_private.key
-    - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'cd site_$CI_COMMIT_SHORT_SHA && docker stack deploy --compose-file docker-compose.yml auction --with-registry-auth --prune'
+# deploy:
+#   stage: deploy
+#   script: # добавить приватный ключ, чтобы можно было подкл по 22 порту ssh
+#     - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'rm -rf site_$CI_COMMIT_SHORT_SHA'
+#     - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'mkdir site_$CI_COMMIT_SHORT_SHA'
+#     - envsubst < docker-compose-production.yml > docker-compose-production-env.yml
+#     - scp -o StrictHostKeyChecking=no -P ${PORT} docker-compose-production-env.yml deploy@${HOST}:site_$CI_COMMIT_SHORT_SHA/docker-compose.yml
+#     - rm -f docker-compose-production-env.yml
+#     - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'mkdir site_$CI_COMMIT_SHORT_SHA/secrets'
+#     - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'cd site_$CI_COMMIT_SHORT_SHA && docker stack deploy --compose-file docker-compose.yml auction --with-registry-auth --prune'
 
     # - apk add -U openssl curl tar gzip bash ca-certificates git
     # - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
