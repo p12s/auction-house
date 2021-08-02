@@ -37,12 +37,13 @@ COMPOSE_PROJECT_NAME=auction docker-compose up -d
 - ❌ Возможность скейлинга (например, с помощью docker-swarm, а еще лучше - minikube/k8s)
 
 ## Добавил от себя
-- ✅ Провиженинг проекта на YandexCloud с помощью Ansible
+- ✅ Подготовка виртуальной машины на YandexCloud с помощью Ansible
 - ✅ Continues Integration с помощью GitHub
 - ✅ Continues Delivery на прод с помощью GitLab CI
 - ✅ Continues deployment на домен auction.p12s.online
 
 ## Что можно улучшить
+- Добавить IaaS - создание виртуальной машины с помощью Terraform (сейчас виртуалка создается в Web UI YC)
 - Вместо хранения БД средствами Docker volumes использовать БД в YC
 - Покрыть код unit-тестами (пока только интеграционные - с помощью postman)
 - Проверить, как работают индексы в БД под нагрузкой, убедиться в оптимальности
