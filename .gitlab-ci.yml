@@ -1,8 +1,8 @@
 image: docker:latest
 
 # Use the OverlayFS driver for improved performance.
-variables:
-  DOCKER_DRIVER: overlay
+# variables:
+#   DOCKER_DRIVER: overlay
 
 services:
   - docker:dind
@@ -14,14 +14,13 @@ stages:
   #- release
   #- deploy
 
-#before_script:
-#  - docker info
-#  - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER --password-stdin $REGISTRY_URL
+before_script:
+  - docker info
+  - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER --password-stdin $REGISTRY_URL
 
 build:
   stage: build
   script:
-    - docker info
     - echo "Fake build is OK 👍👍"
   # except:
   #   - tags
