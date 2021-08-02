@@ -1,4 +1,5 @@
 before_script:
+  - docker info
   - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER --password-stdin $REGISTRY_URL
 
 stages:
