@@ -9,13 +9,11 @@ services:
 
 stages:
   - build
-  - push
   - test
   #- release
   #- deploy
 
 before_script:
-  - docker info
   - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER --password-stdin $REGISTRY_URL
 
 build:
@@ -32,11 +30,6 @@ build:
     - docker --log-level=debug build --pull --file=db/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-db:$CI_COMMIT_SHORT_SHA db
     - docker --log-level=debug build --pull --file=db/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-db:latest db
 
-push:
-  stage: push
-  except:
-    - tags
-  script:
     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-gateway:$CI_COMMIT_SHORT_SHA
     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-gateway:latest
     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-frontend:$CI_COMMIT_SHORT_SHA
