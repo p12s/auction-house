@@ -1,6 +1,4 @@
-before_script:
-  - docker info
-  - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER --password-stdin $REGISTRY_URL
+image: gitlab/dind
 
 stages:
   - build
@@ -8,7 +6,11 @@ stages:
   - test
   #- release
   #- deploy
-  
+
+before_script:
+  - docker info
+  - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER --password-stdin $REGISTRY_URL
+
 build:
   stage: build
   except:
