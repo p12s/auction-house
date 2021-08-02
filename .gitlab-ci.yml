@@ -4,8 +4,10 @@
 # variables:
 #   DOCKER_DRIVER: overlay
 
-# services:
-#   - docker:dind
+image: docker:latest
+
+services:
+  - docker:dind
 
 stages:
   - build
@@ -21,6 +23,7 @@ stages:
 build:
   stage: build
   script:
+    - docker info
     - echo "Fake build is OK 👍👍"
   # except:
   #   - tags
