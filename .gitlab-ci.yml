@@ -44,7 +44,7 @@ test:
   # except:
   #   - tags
   script:
-    - NEW_VERSION=`echo $VERSION | awk -F. -v OFS=. 'NF==1{print ++$NF}; NF>1{if(length($NF+1)>length($NF))$(NF-1)++; $NF=sprintf("%0*d", length($NF), ($NF+1)%(10^length($NF))); print}'`
+    - NEW_VERSION=`echo $VERSION | awk -F. -v OFS=. '$NF=sprintf("%0*d", 2, ($NF+1)%(10^2))'`
     - echo "VERSION - $VERSION NEW_VERSION - $NEW_VERSION"
     - 'curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/28552814/variables/VERSION" --form "value=$NEW_VERSION"'
     - echo "Fake test is OK 👍👍"
