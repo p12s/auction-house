@@ -21,29 +21,27 @@ build:
     - let NEW_VERSION_PATCH=$VERSION_PATCH+1
     - VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
     - echo "Build number BUILD is $VERSION"
-#   script: #${REGISTRY}/${LOGIN}/react-app:latest - $CI_COMMIT_SHORT_SHA $IMAGE_TAG
-#     - docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-gateway:$CI_COMMIT_SHORT_SHA gateway
-#     - docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-gateway:latest gateway
-#     - docker --log-level=debug build --pull --file=frontend/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-frontend:$CI_COMMIT_SHORT_SHA frontend
-#     - docker --log-level=debug build --pull --file=frontend/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-frontend:latest frontend
-#     - docker --log-level=debug build --pull --file=api/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-api:$CI_COMMIT_SHORT_SHA api
-#     - docker --log-level=debug build --pull --file=api/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-api:latest api
-#     - docker --log-level=debug build --pull --file=db/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-db:$CI_COMMIT_SHORT_SHA db
-#     - docker --log-level=debug build --pull --file=db/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-db:latest db
 
-#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-gateway:$CI_COMMIT_SHORT_SHA
-#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-gateway:latest
-#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-frontend:$CI_COMMIT_SHORT_SHA
-#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-frontend:latest
-#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-api:$CI_COMMIT_SHORT_SHA
-#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-api:latest
-#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-db:$CI_COMMIT_SHORT_SHA
-#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-db:latest
+    # - docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-gateway:$VERSION gateway
+    # - docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-gateway:latest gateway
+    # - docker --log-level=debug build --pull --file=frontend/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-frontend:$VERSION frontend
+    # - docker --log-level=debug build --pull --file=frontend/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-frontend:latest frontend
+    # - docker --log-level=debug build --pull --file=api/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-api:$VERSION api
+    # - docker --log-level=debug build --pull --file=api/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-api:latest api
+    # - docker --log-level=debug build --pull --file=db/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-db:$VERSION db
+    # - docker --log-level=debug build --pull --file=db/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-db:latest db
+
+    # - docker push $REGISTRY_URL/$REGISTRY_USER/auction-gateway:$VERSION
+    # - docker push $REGISTRY_URL/$REGISTRY_USER/auction-gateway:latest
+    # - docker push $REGISTRY_URL/$REGISTRY_USER/auction-frontend:$VERSION
+    # - docker push $REGISTRY_URL/$REGISTRY_USER/auction-frontend:latest
+    # - docker push $REGISTRY_URL/$REGISTRY_USER/auction-api:$VERSION
+    # - docker push $REGISTRY_URL/$REGISTRY_USER/auction-api:latest
+    # - docker push $REGISTRY_URL/$REGISTRY_USER/auction-db:$VERSION
+    # - docker push $REGISTRY_URL/$REGISTRY_USER/auction-db:latest
 
 test:
   stage: test
-  except:
-    - tags
   script:
     - let NEW_VERSION_PATCH=$VERSION_PATCH+1
     - VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
@@ -52,8 +50,6 @@ test:
 
 release:
   stage: release
-  only:
-    - tags
   script:
     - let NEW_VERSION_PATCH=$VERSION_PATCH+1
     - VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
