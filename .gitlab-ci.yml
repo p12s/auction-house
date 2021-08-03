@@ -80,6 +80,6 @@ deploy:
     - envsubst < docker-compose-production.yml > docker-compose-production-env.yml
     
     - scp -o StrictHostKeyChecking=no -P ${PORT} docker-compose-production-env.yml deploy@${HOST}:site_$VERSION/docker-compose.yml
-    #- rm -f docker-compose-production-env.yml - гялнуть какой файл получился на проде
+    - rm -f docker-compose-production-env.yml
     - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT "mkdir site_$VERSION/secrets"
-    #- ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT "cd site_$VERSION && export LOGIN=$LOGIN && export REGISTRY=$REGISTRY && export VERSION=$VERSION && docker stack deploy --compose-file docker-compose.yml auction --with-registry-auth --prune"
+    - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT "cd site_$VERSION && docker stack deploy --compose-file docker-compose.yml auction --with-registry-auth --prune"
