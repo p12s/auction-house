@@ -37,10 +37,10 @@ COMPOSE_PROJECT_NAME=auction docker-compose up -d
 - ❌ Возможность скейлинга (например, с помощью docker-swarm, а еще лучше - minikube/k8s)
 
 ## Добавил от себя
-- ✅ Подготовка виртуальной машины на YandexCloud с помощью Ansible
-- ✅ Continues Integration с помощью GitHub
-- ✅ Continues Delivery на прод с помощью GitLab CI
-- ✅ Continues deployment на домен auction.p12s.online
+- Подготовка виртуальной машины на YandexCloud с помощью Ansible
+- Continues Integration с помощью GitHub
+- Continues Delivery на прод с помощью GitLab CI
+- Continues deployment на домен auction.p12s.online
 
 ## Что можно улучшить
 - Добавить IaaS - создание виртуальной машины с помощью Terraform
