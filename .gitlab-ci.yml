@@ -69,8 +69,7 @@ deploy:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
 
-    - let NEW_VERSION_PATCH=$VERSION_PATCH+1
-    - VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
+    - VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH
     - echo "Deploy TAG is $VERSION"
 
     - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT "rm -rf site_$VERSION"
