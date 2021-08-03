@@ -14,10 +14,6 @@ before_script:
   - apk add --update curl && rm -rf /var/cache/apk/*
   - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER --password-stdin $REGISTRY_URL
 
-#  - "VAR=$(curl -s -f  --header \"PRIVATE-TOKEN: ${TOKEN}\" \"${GITLAB_URL}/api/v4/projects/${CI_PROJECT_ID}/variables/${VAR_NAME}\" | jq  -r '.value' ) "
-#  - let VAR=VAR+1
-#  - "curl -s -f --request PUT --header \"PRIVATE-TOKEN: ${TOKEN}\" \"${GITLAB_URL}/api/v4/projects/${CI_PROJECT_ID}/variables/${VAR_NAME}\" --form \"value=${VAR}\" "
-
 build:
   stage: build
   except:
@@ -50,12 +46,13 @@ test:
   except:
     - tags
   script:
+    - echo "Using vars in TEST scripts - $VERSION_PATCH"
     - echo "Fake test is OK 👍👍"
 
 
 after_script:
   - let NEW_VERSION_PATCH=$VERSION_PATCH+1
-  - echo "Using vars in after scripts ___ start - $VERSION_PATCH end - $NEW_VERSION_PATCH"
+  - echo "Using vars in AFTER scripts - $VERSION_PATCH end - $NEW_VERSION_PATCH"
   - 'curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/28552814/variables/VERSION_PATCH" --form "value=$NEW_VERSION_PATCH"'
 
 # release:
