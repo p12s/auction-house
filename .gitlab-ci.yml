@@ -6,9 +6,8 @@ services:
 stages:
   - build
   - test
-  #- release
+  - release
   #- deploy
-  #- update
 
 before_script:
   - apk add --update curl && rm -rf /var/cache/apk/*
@@ -20,8 +19,8 @@ build:
     - tags
   script:
     - let NEW_VERSION_PATCH=$VERSION_PATCH+1
-    - echo "start - $VERSION_PATCH end - $NEW_VERSION_PATCH"
-    - echo "Build number is v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH"
+    - let VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
+    - echo "Build number BUILD is $VERSION"
 #   script: #${REGISTRY}/${LOGIN}/react-app:latest - $CI_COMMIT_SHORT_SHA $IMAGE_TAG
 #     - docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-gateway:$CI_COMMIT_SHORT_SHA gateway
 #     - docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-gateway:latest gateway
@@ -46,23 +45,25 @@ test:
   except:
     - tags
   script:
-    - echo "Using vars in TEST scripts - $VERSION_PATCH"
+    - let NEW_VERSION_PATCH=$VERSION_PATCH+1
+    - let VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
+    - echo "Build number TEST is $VERSION"
     - echo "Fake test is OK 👍👍"
 
-
-after_script:
-  - let NEW_VERSION_PATCH=$VERSION_PATCH+1
-  - echo "Using vars in AFTER scripts - $VERSION_PATCH end - $NEW_VERSION_PATCH"
-  - 'curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/28552814/variables/VERSION_PATCH" --form "value=$NEW_VERSION_PATCH"'
-
-# release:
-#    stage: release
-#    only:
-#      - tags # Условие запуска Job - только если есть метка Git
-#    script:
-#      - docker pull gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_SHORT_SHA
-#      - docker tag gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_SHORT_SHA gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_TAG
-#      - docker push gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_TAG
+release:
+  stage: release
+  only:
+    - tags
+  script:
+    - let NEW_VERSION_PATCH=$VERSION_PATCH+1
+    - let VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
+    - echo "Build number RELEASE is $VERSION"
+    # - docker pull gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_SHORT_SHA
+    # - docker tag gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_SHORT_SHA gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_TAG
+    # - docker push gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_TAG
+  after_script:
+    - echo "Build number SFTER SCRITP RELEASE is $VERSION"
+    - 'curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/28552814/variables/VERSION_PATCH" --form "value=$VERSION"'
 
 # deploy:
 #   stage: deploy
