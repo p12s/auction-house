@@ -1,7 +1,7 @@
 image: docker:latest
 
 variables:
-  NEW_VERSION: $VERSION
+  NEW_VERSION_PATCH: $VERSION_PATCH
 
 services:
   - docker:dind
@@ -11,6 +11,7 @@ stages:
   - test
   #- release
   #- deploy
+  #- update
 
 before_script:
   - apk add --update curl && rm -rf /var/cache/apk/*
@@ -44,10 +45,14 @@ test:
   # except:
   #   - tags
   script:
-    - NEW_VERSION=`echo $VERSION | awk -F. -v OFS=. '$NF=sprintf("%0*d", 2, ($NF+1)%(10^2))'`
-    - echo "VERSION - $VERSION NEW_VERSION - $NEW_VERSION"
-    - 'curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/28552814/variables/VERSION" --form "value=$NEW_VERSION"'
+    - NEW_VERSION_PATCH=(($VERSION_PATCH++))
+    - echo "start - $VERSION_PATCH end - $NEW_VERSION_PATCH"
+    - 'curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/28552814/variables/VERSION_PATCH" --form "value=$NEW_VERSION_PATCH"'
+    - echo "v$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH"
     - echo "Fake test is OK 👍👍"
+
+
+
 
 # release:
 #    stage: release
