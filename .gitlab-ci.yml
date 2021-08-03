@@ -1,7 +1,8 @@
 image: docker:latest
 
-#variables:
-#  NEW_VERSION_PATCH: $VERSION_PATCH
+variables:
+  VERSION_PATCH: $VERSION_PATCH
+  NEW_VERSION_PATCH: 0
 
 services:
   - docker:dind
