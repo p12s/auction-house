@@ -58,8 +58,9 @@ release:
     # - docker tag gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_SHORT_SHA gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_TAG
     # - docker push gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_TAG
   after_script:
-    - echo "Build number SFTER SCRITP RELEASE is $VERSION"
-    - 'curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/28552814/variables/VERSION_PATCH" --form "value=$VERSION"'
+    - let NEW_VERSION_PATCH=$VERSION_PATCH+1
+    - echo "Build number SFTER SCRITP RELEASE is $NEW_VERSION_PATCH"
+    - 'curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/28552814/variables/VERSION_PATCH" --form "value=$NEW_VERSION_PATCH"'
 
 
 # deploy:
