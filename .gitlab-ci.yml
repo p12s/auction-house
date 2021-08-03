@@ -13,6 +13,7 @@ stages:
   #- deploy
 
 before_script:
+  - apk add --update curl && rm -rf /var/cache/apk/*
   - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER --password-stdin $REGISTRY_URL
 
 # build:
