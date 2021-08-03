@@ -62,7 +62,7 @@ deploy:
   script:
     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
     - cat /etc/os-release
-    - apk update && apk add bash -y && apk update && apk add gettext
+    - apk update && apk add bash gettext
     - envsubst --version
 
     - eval $(ssh-agent -s)
