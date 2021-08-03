@@ -1,7 +1,7 @@
 version: "3.8"
 services:
     gateway:
-        image: ${REGISTRY}/${LOGIN}/auction-gateway:${VERSION}
+        image: ghcr.io/p12s/auction-gateway:${VERSION}
         volumes:
             - /etc/letsencrypt:/etc/letsencrypt:ro
             - /var/www/html:/var/www/html:ro
@@ -19,7 +19,7 @@ services:
           
                 
     frontend:
-        image: ${REGISTRY}/${LOGIN}/auction-frontend:${VERSION}
+        image: ghcr.io/p12s/auction-frontend:${VERSION}
         deploy:
             mode: replicated
             replicas: 1
@@ -30,7 +30,7 @@ services:
             - api
 
     api:
-        image: ${REGISTRY}/${LOGIN}/auction-api:${VERSION}
+        image: ghcr.io/p12s/auction-api:${VERSION}
         environment:
             APP_ENV: prod
             APP_DEBUG: 0
@@ -55,7 +55,7 @@ services:
         depends_on:
             - db
     db:
-        image: ${REGISTRY}/${LOGIN}/auction-db:${VERSION}
+        image: ghcr.io/p12s/auction-db:${VERSION}
         environment:
             POSTGRES_PASSWORD: qwerty
             POSTGRES_USER: postgres
