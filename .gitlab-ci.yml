@@ -45,7 +45,7 @@ test:
   #   - tags
   script:
     - echo "VERSION - $VERSION PACKAGE_VERSION - $PACKAGE_VERSION $PRIVATE_TOKEN"
-    - 'curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.example.com/api/v4/projects/28552814/variables/VERSION" --form "value=v0.1.432"'
+    - 'curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/28552814/variables/VERSION" --form "value=v0.1.432"'
     - echo "VERSION - $VERSION PACKAGE_VERSION - $PACKAGE_VERSION $PRIVATE_TOKEN"
     - echo "Fake test is OK 👍👍"
 
