@@ -65,6 +65,7 @@ release:
     - echo "Build number SFTER SCRITP RELEASE is $VERSION"
     - 'curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/28552814/variables/VERSION_PATCH" --form "value=$VERSION"'
 
+
 # deploy:
 #   stage: deploy
 #   script: # добавить приватный ключ, чтобы можно было подкл по 22 порту ssh
