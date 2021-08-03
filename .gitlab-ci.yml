@@ -61,9 +61,8 @@ deploy:
   stage: deploy
   script:
     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-    - apk update && apk add bash -y && apk update && apk add gettext -y
     - cat /etc/os-release
-    - apt-get install gettext-base
+    - apk update && apk add bash -y && apk update && apk add gettext -y
     - envsubst --version
 
     - eval $(ssh-agent -s)
