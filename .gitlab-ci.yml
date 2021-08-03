@@ -15,28 +15,28 @@ stages:
 before_script:
   - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER --password-stdin $REGISTRY_URL
 
-build:
-  stage: build
-  except:
-    - tags
-  script: #${REGISTRY}/${LOGIN}/react-app:latest - $CI_COMMIT_SHORT_SHA $IMAGE_TAG
-    - docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-gateway:$CI_COMMIT_SHORT_SHA gateway
-    - docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-gateway:latest gateway
-    - docker --log-level=debug build --pull --file=frontend/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-frontend:$CI_COMMIT_SHORT_SHA frontend
-    - docker --log-level=debug build --pull --file=frontend/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-frontend:latest frontend
-    - docker --log-level=debug build --pull --file=api/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-api:$CI_COMMIT_SHORT_SHA api
-    - docker --log-level=debug build --pull --file=api/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-api:latest api
-    - docker --log-level=debug build --pull --file=db/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-db:$CI_COMMIT_SHORT_SHA db
-    - docker --log-level=debug build --pull --file=db/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-db:latest db
+# build:
+#   stage: build
+#   except:
+#     - tags
+#   script: #${REGISTRY}/${LOGIN}/react-app:latest - $CI_COMMIT_SHORT_SHA $IMAGE_TAG
+#     - docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-gateway:$CI_COMMIT_SHORT_SHA gateway
+#     - docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-gateway:latest gateway
+#     - docker --log-level=debug build --pull --file=frontend/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-frontend:$CI_COMMIT_SHORT_SHA frontend
+#     - docker --log-level=debug build --pull --file=frontend/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-frontend:latest frontend
+#     - docker --log-level=debug build --pull --file=api/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-api:$CI_COMMIT_SHORT_SHA api
+#     - docker --log-level=debug build --pull --file=api/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-api:latest api
+#     - docker --log-level=debug build --pull --file=db/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-db:$CI_COMMIT_SHORT_SHA db
+#     - docker --log-level=debug build --pull --file=db/docker/production/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-db:latest db
 
-    - docker push $REGISTRY_URL/$REGISTRY_USER/auction-gateway:$CI_COMMIT_SHORT_SHA
-    - docker push $REGISTRY_URL/$REGISTRY_USER/auction-gateway:latest
-    - docker push $REGISTRY_URL/$REGISTRY_USER/auction-frontend:$CI_COMMIT_SHORT_SHA
-    - docker push $REGISTRY_URL/$REGISTRY_USER/auction-frontend:latest
-    - docker push $REGISTRY_URL/$REGISTRY_USER/auction-api:$CI_COMMIT_SHORT_SHA
-    - docker push $REGISTRY_URL/$REGISTRY_USER/auction-api:latest
-    - docker push $REGISTRY_URL/$REGISTRY_USER/auction-db:$CI_COMMIT_SHORT_SHA
-    - docker push $REGISTRY_URL/$REGISTRY_USER/auction-db:latest
+#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-gateway:$CI_COMMIT_SHORT_SHA
+#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-gateway:latest
+#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-frontend:$CI_COMMIT_SHORT_SHA
+#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-frontend:latest
+#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-api:$CI_COMMIT_SHORT_SHA
+#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-api:latest
+#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-db:$CI_COMMIT_SHORT_SHA
+#     - docker push $REGISTRY_URL/$REGISTRY_USER/auction-db:latest
 
 test:
   stage: test
