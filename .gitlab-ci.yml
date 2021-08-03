@@ -7,7 +7,7 @@ stages:
   - build
   - test
   - release
-  #- deploy
+  - deploy
 
 before_script:
   - apk add --update curl && rm -rf /var/cache/apk/*
@@ -51,30 +51,29 @@ release:
     - let NEW_VERSION_PATCH=$VERSION_PATCH+1
     - VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
     - echo "Release TAG is $VERSION"
-    # - docker pull gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_SHORT_SHA
-    # - docker tag gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_SHORT_SHA gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_TAG
-    # - docker push gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_TAG
   after_script:
     - let NEW_VERSION_PATCH=$VERSION_PATCH+1
     - echo "Saved current patch is $NEW_VERSION_PATCH"
     - 'curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/28552814/variables/VERSION_PATCH" --form "value=$NEW_VERSION_PATCH"'
 
 
-# deploy: выкладка на прод
-#   stage: deploy
-#   script: # добавить приватный ключ, чтобы можно было подкл по 22 порту ssh
-#     - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'rm -rf site_$CI_COMMIT_SHORT_SHA'
-#     - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'mkdir site_$CI_COMMIT_SHORT_SHA'
-#     - envsubst < docker-compose-production.yml > docker-compose-production-env.yml
-#     - scp -o StrictHostKeyChecking=no -P ${PORT} docker-compose-production-env.yml deploy@${HOST}:site_$CI_COMMIT_SHORT_SHA/docker-compose.yml
-#     - rm -f docker-compose-production-env.yml
-#     - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'mkdir site_$CI_COMMIT_SHORT_SHA/secrets'
-#     - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'cd site_$CI_COMMIT_SHORT_SHA && docker stack deploy --compose-file docker-compose.yml auction --with-registry-auth --prune'
+deploy:
+  stage: deploy
+  before_script:
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_YC_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+  script:
+    - let NEW_VERSION_PATCH=$VERSION_PATCH+1
+    - VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
+    - echo "Deploy TAG is $VERSION"
 
-    # - apk add -U openssl curl tar gzip bash ca-certificates git
-    # - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-    # - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
-    # - mkdir -p ~/.kube/ && echo $KUBE_CONFIG | base64 -d > ~/.kube/config
-    # - kubectl cluster-info
-    # - curl -L https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3  | bash
-    # - helm upgrade ui -i chart/
+    - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'rm -rf site_$VERSION'
+    - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'mkdir site_$VERSION'
+    - envsubst < docker-compose-production.yml > docker-compose-production-env.yml
+    - scp -o StrictHostKeyChecking=no -P ${PORT} docker-compose-production-env.yml deploy@${HOST}:site_$VERSION/docker-compose.yml
+    - rm -f docker-compose-production-env.yml
+    - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'mkdir site_$VERSION/secrets'
+    - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT 'cd site_$VERSION && docker stack deploy --compose-file docker-compose.yml auction --with-registry-auth --prune'
