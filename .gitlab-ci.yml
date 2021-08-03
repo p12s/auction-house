@@ -63,7 +63,6 @@ deploy:
     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
     - cat /etc/os-release
     - apk update && apk add bash gettext
-    - envsubst --version
 
     - eval $(ssh-agent -s)
     - echo "$SSH_YC_PRIVATE_KEY" | tr -d '\r' | ssh-add -
@@ -76,8 +75,11 @@ deploy:
 
     - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT "rm -rf site_$VERSION"
     - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT "mkdir site_$VERSION"
+
+    - export LOGIN=$LOGIN REGISTRY=$REGISTRY VERSION=$VERSION
     - envsubst < docker-compose-production.yml > docker-compose-production-env.yml
+    
     - scp -o StrictHostKeyChecking=no -P ${PORT} docker-compose-production-env.yml deploy@${HOST}:site_$VERSION/docker-compose.yml
-    - rm -f docker-compose-production-env.yml
+    #- rm -f docker-compose-production-env.yml - гялнуть какой файл получился на проде
     - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT "mkdir site_$VERSION/secrets"
-    - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT "cd site_$VERSION && export LOGIN=$LOGIN && export REGISTRY=$REGISTRY && export VERSION=$VERSION && docker stack deploy --compose-file docker-compose.yml auction --with-registry-auth --prune"
+    #- ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT "cd site_$VERSION && export LOGIN=$LOGIN && export REGISTRY=$REGISTRY && export VERSION=$VERSION && docker stack deploy --compose-file docker-compose.yml auction --with-registry-auth --prune"
