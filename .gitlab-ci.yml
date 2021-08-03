@@ -59,7 +59,7 @@ release:
 
 deploy:
   stage: deploy
-  before_script:
+  script:
     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
     - apk update && apk add bash -y && apk update && apk add gettext -y
     - cat /etc/os-release
@@ -70,7 +70,7 @@ deploy:
     - echo "$SSH_YC_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-  script:
+
     - let NEW_VERSION_PATCH=$VERSION_PATCH+1
     - VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
     - echo "Deploy TAG is $VERSION"
