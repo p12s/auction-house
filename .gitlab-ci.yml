@@ -19,7 +19,7 @@ build:
     - tags
   script:
     - let NEW_VERSION_PATCH=$VERSION_PATCH+1
-    - let VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
+    - VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
     - echo "Build number BUILD is $VERSION"
 #   script: #${REGISTRY}/${LOGIN}/react-app:latest - $CI_COMMIT_SHORT_SHA $IMAGE_TAG
 #     - docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=$REGISTRY_URL/$REGISTRY_USER/auction-gateway:$CI_COMMIT_SHORT_SHA gateway
@@ -46,7 +46,7 @@ test:
     - tags
   script:
     - let NEW_VERSION_PATCH=$VERSION_PATCH+1
-    - let VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
+    - VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
     - echo "Build number TEST is $VERSION"
     - echo "Fake test is OK 👍👍"
 
@@ -56,7 +56,7 @@ release:
     - tags
   script:
     - let NEW_VERSION_PATCH=$VERSION_PATCH+1
-    - let VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
+    - VERSION=v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH
     - echo "Build number RELEASE is $VERSION"
     # - docker pull gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_SHORT_SHA
     # - docker tag gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_SHORT_SHA gcr.io/cd-k8s-236617/user-2-ui:$CI_COMMIT_TAG
