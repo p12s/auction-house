@@ -77,7 +77,7 @@ deploy:
     - ssh -o StrictHostKeyChecking=no deploy@$HOST -p $PORT "mkdir site_$VERSION"
 
     - export LOGIN=$LOGIN REGISTRY=$REGISTRY VERSION=$VERSION
-    - envsubst < docker-compose-production.yml > docker-compose-production-env.yml
+    - envsubst '$LOGIN,$REGISTRY,$VERSION' < docker-compose-production.yml > docker-compose-production-env.yml
     
     - scp -o StrictHostKeyChecking=no -P ${PORT} docker-compose-production-env.yml deploy@${HOST}:site_$VERSION/docker-compose.yml
     #- rm -f docker-compose-production-env.yml - гялнуть какой файл получился на проде
