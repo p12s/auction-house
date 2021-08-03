@@ -1,7 +1,7 @@
 image: docker:latest
 
-variables:
-  NEW_VERSION_PATCH: $VERSION_PATCH
+#variables:
+#  NEW_VERSION_PATCH: $VERSION_PATCH
 
 services:
   - docker:dind
@@ -21,9 +21,9 @@ before_script:
 auto_increment:
   stage: init
   script:
-    - NEW_VERSION_PATCH=$VERSION_PATCH+1
+    - let NEW_VERSION_PATCH=$VERSION_PATCH+1
     - echo "start - $VERSION_PATCH end - $NEW_VERSION_PATCH"
-    - echo "v$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH"
+    - echo "Build number is v$VERSION_MAJOR.$VERSION_MINOR.$NEW_VERSION_PATCH"
 
 #  - "VAR=$(curl -s -f  --header \"PRIVATE-TOKEN: ${TOKEN}\" \"${GITLAB_URL}/api/v4/projects/${CI_PROJECT_ID}/variables/${VAR_NAME}\" | jq  -r '.value' ) "
 #  - let VAR=VAR+1
@@ -57,10 +57,12 @@ test:
   # except:
   #   - tags
   script:
+    - echo "Using vars in test ___ start - $VERSION_PATCH end - $NEW_VERSION_PATCH"
     - echo "Fake test is OK 👍👍"
 
 
 after_script:
+  - echo "Using vars in after scripts ___ start - $VERSION_PATCH end - $NEW_VERSION_PATCH"
   - 'curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" "https://gitlab.com/api/v4/projects/28552814/variables/VERSION_PATCH" --form "value=$NEW_VERSION_PATCH"'
 
 # release:
