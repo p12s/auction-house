@@ -18,6 +18,6 @@ import (
 // @Router /health [get]
 func (h *Handler) health(c *gin.Context) {
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"status": "OK",
+		"status": "OK🔥",
 	})
 }
