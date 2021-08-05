@@ -10,7 +10,7 @@ services:
             - "443:443"
         deploy:
             mode: replicated
-            replicas: 1
+            replicas: 2
             update_config:
                 parallelism: 1
                 delay: 10s
@@ -22,7 +22,7 @@ services:
         image: ghcr.io/p12s/auction-frontend:${VERSION}
         deploy:
             mode: replicated
-            replicas: 1
+            replicas: 2
             update_config:
                 parallelism: 1
                 delay: 10s
@@ -48,12 +48,11 @@ services:
             - ./secrets:/run/secrets:ro
         deploy:
             mode: replicated
-            replicas: 1
+            replicas: 2
             update_config:
                 parallelism: 1
                 delay: 5s
-        depends_on:
-            - db
+
     db:
         image: ghcr.io/p12s/auction-db:${VERSION}
         environment:
@@ -70,6 +69,14 @@ services:
             update_config:
                 parallelism: 1
                 delay: 5s
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 5
+                window: 120s
+            placement:
+                constraints: [node.role == manager]
+            endpoint_mode: dnsrr # говорим overlay-dns-сервису докера, чтобы он использовал round-robin адресацию, чтобы возвращалался один и тот же ip
 
 volumes:
     pgdata:
