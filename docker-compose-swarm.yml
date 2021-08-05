@@ -11,7 +11,7 @@ services:
             - "8082:8082"
         deploy:
             mode: replicated
-            replicas: 2
+            replicas: 1
             update_config:
                 parallelism: 1
                 delay: 10s
@@ -22,7 +22,7 @@ services:
         image: ${REGISTRY}/${LOGIN}/auction-frontend:${IMAGE_TAG}
         deploy:
             mode: replicated
-            replicas: 2
+            replicas: 1
             update_config:
                 parallelism: 1
                 delay: 10s
@@ -46,7 +46,7 @@ services:
             - ./secrets:/run/secrets:ro
         deploy:
             mode: replicated
-            replicas: 2
+            replicas: 1
             update_config:
                 parallelism: 1
                 delay: 5s
@@ -121,7 +121,7 @@ services:
                 window: 120s
             placement:
                 constraints: [node.role == manager]
-            endpoint_mode: dnsrr # говорим overlay-dns-сервису докера, чтобы он использовал round-robin адресацию, чтобы возвращалался один и тот же ip
+
 #volumes:
 #    db:
 

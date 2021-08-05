@@ -76,7 +76,6 @@ services:
                 window: 120s
             placement:
                 constraints: [node.role == manager]
-            endpoint_mode: dnsrr # говорим overlay-dns-сервису докера, чтобы он использовал round-robin адресацию, чтобы возвращалался один и тот же ip
 
 volumes:
     pgdata:

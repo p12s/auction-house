@@ -1,11 +1,11 @@
-FROM migrate/migrate:latest as migrate
+FROM migrate/migrate:4 as migrate
 
 # FROM postgres:alpine3.14
 FROM postgres:13.3-alpine
 
 WORKDIR /
 
-COPY --from=migrate /usr/local/bin/migrate /usr/local/bin/migrate
+COPY --from=migrate /usr/bin/migrate /usr/local/bin/migrate
 
 COPY ./schema /migrations
 COPY ./docker-entrypoint.sh /
