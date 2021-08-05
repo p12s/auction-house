@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY ./package.json ./yarn.lock ./
 RUN npm install --force && yarn install && yarn cache clean
+# RUN yarn install && yarn cache clean
 
 COPY ./ ./
 RUN yarn build

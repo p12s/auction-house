@@ -6,6 +6,7 @@ RUN apt-get update && apt-get upgrade && apt-get install -y curl lsof
 
 COPY ./docker/common/nginx/snippets /etc/nginx/snippets
 COPY ./docker/development/nginx/conf.d /etc/nginx/conf.d
+COPY ./docker/common/nginx/nginx.conf /etc/nginx/
 
 WORKDIR /app
 

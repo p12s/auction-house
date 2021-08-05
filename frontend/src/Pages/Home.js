@@ -14,7 +14,10 @@ export default class Home extends Component {
                 <Card bg="light">
                   <Card.Img
                     variant="top"
-                    src="https://image.shutterstock.com/image-photo/successful-company-happy-workers-600w-722985031.jpg"
+                    src="/images/2.jpg"
+                    alt="2"
+                    width="400"
+                    height="280"
                   />
                   <Card.Body>
                     <Card.Title>Developers</Card.Title>
@@ -32,7 +35,10 @@ export default class Home extends Component {
                   </Card.Body>
                   <Card.Img
                     variant="bottom"
-                    src="https://image.shutterstock.com/image-photo/smiling-diverse-colleagues-gather-boardroom-600w-1687550977.jpg"
+                    src="/images/3.jpg"
+                    alt="3"
+                    width="400"
+                    height="280"
                   />
                 </Card>
               </Col>
@@ -40,7 +46,10 @@ export default class Home extends Component {
                 <Card bg="light">
                   <Card.Img
                     variant="top"
-                    src="https://image.shutterstock.com/image-photo/team-competing-tug-war-600w-1090948673.jpg"
+                    src="/images/4.jpg"
+                    alt="4"
+                    width="400"
+                    height="280"
                   />
                   <Card.Body>
                     <Card.Title>Sales</Card.Title>

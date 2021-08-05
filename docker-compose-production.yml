@@ -10,7 +10,7 @@ services:
             - "443:443"
         deploy:
             mode: replicated
-            replicas: 2
+            replicas: 1
             update_config:
                 parallelism: 1
                 delay: 10s
@@ -22,12 +22,10 @@ services:
         image: ghcr.io/p12s/auction-frontend:${VERSION}
         deploy:
             mode: replicated
-            replicas: 2
+            replicas: 1
             update_config:
                 parallelism: 1
                 delay: 10s
-        depends_on:
-            - api
 
     api:
         image: ghcr.io/p12s/auction-api:${VERSION}
@@ -48,7 +46,7 @@ services:
             - ./secrets:/run/secrets:ro
         deploy:
             mode: replicated
-            replicas: 2
+            replicas: 1
             update_config:
                 parallelism: 1
                 delay: 5s
