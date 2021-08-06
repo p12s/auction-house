@@ -9,6 +9,7 @@
 Подробнее [здесь](task.md)
 
 ## Выполнение
+Запуск на локале с помощью dokcer-compose:
 ```
 COMPOSE_PROJECT_NAME=auction docker-compose up -d
 ```

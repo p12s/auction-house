@@ -1,24 +1,4 @@
 
-
-
-up: docker-up
-down: docker-down
-restart: down up
-
-update-deps: react-yarn-upgrade restart
-
-
-
-
-
-docker-up:
-	docker-compose up -d
-
-docker-down:
-	docker-compose down --remove-orphans
-
-
-
 react-clear:
 	docker run --rm -v ${PWD}/frontend:/app -w /app alpine sh -c 'rm -rf .ready build'
 

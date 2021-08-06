@@ -15,6 +15,7 @@
 api/configs/config.yml
 secrets/sentry_dsn.txt
 .database/
+Makefile.my
 
 # User-specific stuff
 .idea/**/workspace.xml
