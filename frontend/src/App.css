@@ -59,6 +59,16 @@
     white-space: nowrap;
     margin-bottom: 0;
 }
-
-
+.object-price-current {
+    font-size: 30px;
+    margin-bottom: 0;
+}
+.object-price-regular {
+    font-size: 20px;
+    margin-bottom: 0;
+}
+.price-name {
+    display: inline-block;
+    width: 120px;
+}
 

@@ -12,9 +12,8 @@ import logo from "./opensea.svg";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Home from "../Pages/Home";
-import About from "../Pages/About";
-import Contacts from "../Pages/Contacts";
-import Blog from "../Pages/Blog";
+import Detail from "../Pages/Detail";
+import Profile from "../Pages/Profile";
 
 export default class Header extends Component {
     render() {
@@ -53,12 +52,9 @@ export default class Header extends Component {
                                 <Button variant="outline-info" className="ml-4">Search</Button>
                             </Form>
                             <Nav className="mr-auto">
-                                <Nav.Link href="/marketplace">
-                                    <Navbar.Text className="font-weight-bold">
-                                        Marketplace
-                                    </Navbar.Text>
-                                </Nav.Link>
-                                <Nav.Link href="/profile" className="font-weight-bold">My Profile</Nav.Link>
+                                <Nav.Link href="/detail">Detail</Nav.Link>
+                                <Nav.Link href="/">Marketplace</Nav.Link>
+                                <Nav.Link href="/profile" className="font-weight-bold">Profile</Nav.Link>
                             </Nav>
 
                         </Navbar.Collapse>
@@ -66,10 +62,9 @@ export default class Header extends Component {
                 </Navbar>
                 <Router>
                     <Switch>
+                        <Route exact path="/detail" component={Detail} />
                         <Route exact path="/" component={Home} />
-                        <Route exact path="/about" component={About} />
-                        <Route exact path="/contacts" component={Contacts} />
-                        <Route exact path="/blog" component={Blog} />
+                        <Route exact path="/profile" component={Profile} />
                     </Switch>
                 </Router>
             </>

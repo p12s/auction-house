@@ -1,18 +1,26 @@
-import React, { Component } from "react";
+import React, { Component, Link } from "react";
 import { Card, CardDeck, Container, Row, Col, Button, ListGroup } from "react-bootstrap";
 import NumberFormat from 'react-number-format';
 import Accordion from 'react-bootstrap/Accordion'
-
-function openDetailPage() {
-    console.log('open detail');
-}
+import {Redirect} from 'react-router-dom';
 
 function loadCategory() {
     console.log('load category');
 }
 
+function openDetailPage() {
+    window.location.href = window.location.protocol + '//' + window.location.host + '/detail';
+}
+
 export default class Home extends Component {
+
+    
+    
+
     render() {
+
+
+
         return (
             <>
                 <Container fluid  style={{paddingTop: "70px"}}>
@@ -36,7 +44,7 @@ export default class Home extends Component {
                                     <Accordion.Toggle as={Card.Header} eventKey="1">
                                         Categories
                                     </Accordion.Toggle>
-                                    <Accordion.Collapse eventKey="1">
+                                    <Accordion.Collapse eventKey="1" className="collapse show">
                                         <Card.Body>
                                             <ListGroup defaultActiveKey="#link1">
                                                 <ListGroup.Item action onClick={loadCategory}>Antiques and art objects</ListGroup.Item>
@@ -64,6 +72,7 @@ export default class Home extends Component {
                                     <Row className="grid flex-nowrap mb-4" key={row}>
                                         {[...Array(4)].map((val, col) =>
                                             <Col  className="grid" key={col}>
+                                                {/* <Link to="/some-url" /> */}
                                                 <Card className="card-hover" bg="light" tag="a" onClick={openDetailPage} style={{ cursor: "pointer" }}>
                                                     <Card.Img
                                                         variant="top"
@@ -75,8 +84,8 @@ export default class Home extends Component {
                                                     />
                                                     <Card.Body>
                                                         <div className="card-description">
-                                                            <p className="object-owner">ФокТехПромСнаб</p>
-                                                            <p className="object-title">Помещения на ул. Бухарестская</p>
+                                                            <p className="object-owner">FAANG</p>
+                                                            <p className="object-title">Building on st. Bucharest</p>
                                                             <p className="object-price">
                                                                 <NumberFormat value={123000000.00} displayType={'text'} thousandSeparator={true} suffix={' \u20BD'} />
                                                             </p>
