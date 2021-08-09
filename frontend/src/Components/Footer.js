@@ -16,6 +16,7 @@ export default class Footer extends Component {
                     bg="light"
                     variant="light"
                     className="text-dark mt-4 text-right"
+                    fixed="bottom"
                 >
                     <Navbar.Brand href="/">
                         <img

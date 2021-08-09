@@ -1,8 +1,7 @@
-import React, { Component, Link } from "react";
+import React, { Component } from "react";
 import { Card, CardDeck, Container, Row, Col, Button, ListGroup } from "react-bootstrap";
 import NumberFormat from 'react-number-format';
 import Accordion from 'react-bootstrap/Accordion'
-import {Redirect} from 'react-router-dom';
 
 function loadCategory() {
     console.log('load category');
@@ -13,17 +12,10 @@ function openDetailPage() {
 }
 
 export default class Home extends Component {
-
-    
-    
-
     render() {
-
-
-
         return (
             <>
-                <Container fluid  style={{paddingTop: "70px"}}>
+                <Container fluid  style={{paddingTop: "70px", paddingBottom: "70px"}}>
                     <Row className="mt-10">
                         <Col xs={2}>
                             <Accordion>

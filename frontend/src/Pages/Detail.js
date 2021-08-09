@@ -5,7 +5,7 @@ import NumberFormat from 'react-number-format';
 export default class Detail extends Component {
     render() {
         return (
-            <Container style={{paddingTop: "70px"}}>
+            <Container style={{paddingTop: "70px", paddingBottom: "70px"}}>
                 <Breadcrumb className="mb-0">
                     <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
                     <Breadcrumb.Item href="/apartments">Apartments</Breadcrumb.Item>
