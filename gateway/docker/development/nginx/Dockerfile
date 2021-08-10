@@ -2,7 +2,8 @@
 FROM nginx:latest
 
 # RUN apk add --no-cache curl
-RUN apt-get update && apt-get upgrade && apt-get install -y curl lsof
+
+RUN apt-get update && apt-get upgrade -y && apt-get install curl -y && apt-get install lsof -y
 
 COPY ./docker/common/nginx/snippets /etc/nginx/snippets
 COPY ./docker/development/nginx/conf.d /etc/nginx/conf.d

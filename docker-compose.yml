@@ -1,0 +1,45 @@
+version: "3.9"
+# запуск вместе: docker-compose up -d
+# стоп: docker-compose down --remove-orphans
+# cd db && migrate -path ./schema -database 'postgres://postgres:qwerty@localhost:5432/postgres?sslmode=disable' up
+services:
+    # запуск отдельно этого блока: docker-compose run --detach --publish 8081:8081 api
+    api:
+      build:
+        context: ./api
+        dockerfile: ./docker/development/Dockerfile
+      environment:
+        APP_ENV: dev
+        APP_DEBUG: 1
+        API_PORT: 8081
+        POSTGRES_HOST: db
+        POSTGRES_PASSWORD: qwerty
+        POSTGRES_PORT: 5432
+        POSTGRES_USER: postgres
+        POSTGRES_DB: postgres
+        POSTGRES_SSL_MODE: disable
+        PGDATA: /var/lib/postgresql/data
+      ports:
+        - "8081:8081"
+      depends_on:
+        db:
+          condition: service_healthy
+
+    # запуск отдельно этого блока: docker-compose run --detach --publish 5432:5432 db
+    db:
+      build:
+        context: ./db
+        dockerfile: ./docker/local/Dockerfile
+      environment:
+        POSTGRES_PASSWORD: qwerty
+        POSTGRES_USER: postgres
+        POSTGRES_DB: postgres
+      volumes:
+          - ./.database/postgres/data:/var/lib/postgresql/data
+      ports:
+          - "5432:5432"
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready"]
+        interval: 2s
+        timeout: 1s
+        retries: 5

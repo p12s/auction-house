@@ -1,6 +1,6 @@
 # Go - директивы работы с папкой API
 go-build:
-	go mod download && go build api/main.go
+	cd api && go mod download && go build main.go && rm main && cd ..
 
 test:
 	go test --short -coverprofile=cover.out -v ./...
@@ -17,6 +17,11 @@ swag:
 
 lint:
 	golangci-lint run
+
+recompose:
+	docker-compose down --remove-orphans
+	docker rmi auction-house_api:latest
+	docker-compose up -d
 
 # ========================== BUILD DEVELOPMENT DOCKER IMAGES 
 dev-build-gateway:
