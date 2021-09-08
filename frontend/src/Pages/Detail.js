@@ -1,8 +1,16 @@
 import React, { Component } from "react";
 import { Container, Media, Col, Row, Card, Button, Table, Accordion, Breadcrumb } from "react-bootstrap";
 import NumberFormat from 'react-number-format';
+import { takeBid } from '../actions/bid';
 
+// TODO class-овый подход устарел, нужно все переделать на функции
 export default class Detail extends Component {
+
+    takeBid() {
+        console.log('take a bid')
+        takeBid()
+    }
+
     render() {
         return (
             <Container style={{paddingTop: "70px", paddingBottom: "70px"}}>
@@ -40,6 +48,7 @@ export default class Detail extends Component {
                         </Media>
                     </Col>
                     <Col md="7">
+                        <h4>Фронтенд сделан с использованием class-ов React, что сейчас считается устаревшим.<br/>Однако для демонстрации идеи этого достаточно.</h4>
                         <h1>Building on st. Bucharest</h1>
                         <div>
                             <span>Owned by <Button variant="link" className="p-lg-0">FAANG</Button></span>
@@ -80,7 +89,7 @@ export default class Detail extends Component {
                                         </span>
                                     </p>
                                 </div>{' '}
-                                <Button variant="primary" size="lg" className="mt-2">Take a bid</Button>
+                                <Button onClick={this.takeBid} variant="primary" size="lg" className="mt-2">Take a bid</Button>
                             </Card.Body>
                         </Card>
                         <Table className="mt-4" striped bordered hover>
@@ -94,17 +103,17 @@ export default class Detail extends Component {
                             <tbody>
                             <tr>
                                 <td><NumberFormat value={114000000.00} displayType={'text'} thousandSeparator={true} suffix={' \u20BD'} /></td>
-                                <td>09.08.2021 12:23:31</td>
-                                <td>Mister Z</td>
+                                <td>09.08.2021 12:25:01</td>
+                                <td>Mister Z (You)</td>
                             </tr>
                             <tr>
                                 <td><NumberFormat value={112000000.00} displayType={'text'} thousandSeparator={true} suffix={' \u20BD'} /></td>
-                                <td>08.08.2021 12:23:31</td>
+                                <td>08.08.2021 12:20:21</td>
                                 <td>Mister Y</td>
                             </tr>
                             <tr>
                                 <td><NumberFormat value={110000000.00} displayType={'text'} thousandSeparator={true} suffix={' \u20BD'} /></td>
-                                <td>07.08.2021 12:23:31</td>
+                                <td>07.08.2021 12:17:31</td>
                                 <td>Mister X</td>
                             </tr>
                             </tbody>

@@ -7,6 +7,7 @@ function loadCategory() {
     console.log('load category');
 }
 
+// TODO использовать config с переменными dev/prod
 function openDetailPage() {
     window.location.href = window.location.protocol + '//' + window.location.host + '/detail';
 }
@@ -14,7 +15,7 @@ function openDetailPage() {
 export default class Home extends Component {
     render() {
         return (
-            <>
+            <div>
                 <Container fluid  style={{paddingTop: "70px", paddingBottom: "70px"}}>
                     <Row className="mt-10">
                         <Col xs={2}>
@@ -58,9 +59,10 @@ export default class Home extends Component {
                             </Accordion>
                         </Col>
                         <Col xs={10}>
+                            <h4>Фронтенд сделан с использованием class-ов React, что сейчас считается устаревшим.<br/>Однако для демонстрации идеи этого достаточно.</h4>
                             <CardDeck>
                                 {/* Почему-то CardDeck автоматически не выровнял кол-во колоно, пришлось доабвить Col */}
-                                {[...Array(4)].map((val, row) =>
+                                {[...Array(2)].map((val, row) =>
                                     <Row className="grid flex-nowrap mb-4" key={row}>
                                         {[...Array(4)].map((val, col) =>
                                             <Col  className="grid" key={col}>
@@ -92,7 +94,7 @@ export default class Home extends Component {
                         </Col>
                     </Row>
                 </Container>
-            </>
+            </div>
         );
     }
 }

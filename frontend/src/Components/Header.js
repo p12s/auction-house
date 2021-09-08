@@ -18,7 +18,7 @@ import Profile from "../Pages/Profile";
 export default class Header extends Component {
     render() {
         return (
-            <>
+            <div>
                 <Navbar
                     collapseOnSelect
                     expand="md"
@@ -56,7 +56,6 @@ export default class Header extends Component {
                                 <Nav.Link href="/">Marketplace</Nav.Link>
                                 <Nav.Link href="/profile" className="font-weight-bold">Profile</Nav.Link>
                             </Nav>
-
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>
@@ -67,7 +66,7 @@ export default class Header extends Component {
                         <Route exact path="/profile" component={Profile} />
                     </Switch>
                 </Router>
-            </>
+            </div>
         );
     }
 }

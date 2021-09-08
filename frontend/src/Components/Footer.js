@@ -10,7 +10,6 @@ import logo from "./opensea.svg";
 export default class Footer extends Component {
     render() {
         return (
-            <>
                 <Navbar
                     expand="md"
                     bg="light"
@@ -28,7 +27,6 @@ export default class Footer extends Component {
                         />
                     </Navbar.Brand>
                 </Navbar>
-            </>
         );
     }
 }
