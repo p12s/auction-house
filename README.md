@@ -38,7 +38,7 @@ IMAGE_TAG=dev REGISTRY=ghcr.io LOGIN=p12s make try-dev-deploy
 ## Усложнения
 - ❌ Предоставление API на websocket
 - ❌ Пример gRPC-клиента, работающего с этим апи
-- ❌ Возможность скейлинга (например, с помощью docker-swarm, а еще лучше - minikube/k8s)
+- ✅ Возможность скейлинга (например, с помощью docker-swarm, а еще лучше - minikube/k8s)
 
 ## Добавил от себя
 - Подготовка виртуальной машины на YandexCloud с помощью Ansible
