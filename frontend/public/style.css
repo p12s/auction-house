@@ -1,10 +1,10 @@
 body {
-    background-color: aliceblue;
-    font-size: 30px;
+  background-color: aliceblue;
+  font-size: 30px;
 }
 .app {
-    width: 500px;
-    margin: 50px auto 0 auto;
+  width: 500px;
+  margin: 50px auto 0 auto;
 }
 
 .link {
@@ -16,7 +16,7 @@ body {
   line-height: 30px;
   background-color: bisque;
   box-shadow: none;
-  border: 2px solid sienna!important;
+  border: 2px solid sienna !important;
   border-radius: 5px;
   cursor: pointer;
 }
@@ -31,7 +31,3 @@ body {
   line-height: 30px;
   width: 70%;
 }
-
-
-
-

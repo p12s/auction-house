@@ -15,6 +15,7 @@
 api/configs/config.yml
 secrets/sentry_dsn.txt
 .database/
+Makefile.my
 
 # User-specific stuff
 .idea/**/workspace.xml
@@ -40,6 +41,7 @@ secrets/sentry_dsn.txt
 .idea/**/libraries
 **/node_modules/
 frontend/build/
+frontend/node_modules
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,

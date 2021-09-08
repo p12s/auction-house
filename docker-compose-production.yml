@@ -26,8 +26,6 @@ services:
             update_config:
                 parallelism: 1
                 delay: 10s
-        depends_on:
-            - api
 
     api:
         image: ghcr.io/p12s/auction-api:${VERSION}
@@ -52,8 +50,7 @@ services:
             update_config:
                 parallelism: 1
                 delay: 5s
-        depends_on:
-            - db
+
     db:
         image: ghcr.io/p12s/auction-db:${VERSION}
         environment:
@@ -70,6 +67,13 @@ services:
             update_config:
                 parallelism: 1
                 delay: 5s
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 5
+                window: 120s
+            placement:
+                constraints: [node.role == manager]
 
 volumes:
     pgdata:

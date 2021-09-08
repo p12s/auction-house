@@ -1,5 +1,14 @@
 version: "3.8"
 services:
+    swarm-cronjob:
+        image: crazymax/swarm-cronjob:latest
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        environment:
+            LOG_LEVEL: info
+        deploy:
+            placement:
+                constraints: [node.role == manager]
     gateway:
         image: ${REGISTRY}/${LOGIN}/auction-gateway:${IMAGE_TAG}
         volumes:
@@ -26,8 +35,6 @@ services:
             update_config:
                 parallelism: 1
                 delay: 10s
-        depends_on:
-            - api
 
     api:
         image: ${REGISTRY}/${LOGIN}/auction-api:${IMAGE_TAG}
@@ -52,55 +59,7 @@ services:
             update_config:
                 parallelism: 1
                 delay: 5s
-        depends_on:
-            - db
-    # db:
-    #     image: ${REGISTRY}/${LOGIN}/auction-db:${IMAGE_TAG}
-    #     environment:
-    #         POSTGRES_PASSWORD: qwerty
-    #         POSTGRES_USER: postgres
-    #         POSTGRES_DB: postgres
-    #     volumes:
-    #         - db:/var/lib/postgresql/data
-    #     ports:
-    #         - "5432:5432"
-    #     deploy:
-    #         mode: replicated
-    #         replicas: 1
-    #         update_config:
-    #             parallelism: 1
-    #             delay: 5s
 
-    # api-migration:
-    #     image: ${REGISTRY}/auction-api-php-cli:${IMAGE_TAG}
-    #     environment:
-    #         APP_ENV: prod
-    #         APP_DEBUG: 0
-    #         DB_HOST: api-postgres
-    #         DB_USER: app
-    #         DB_PASSWORD: ${API_DB_PASSWORD}
-    #         DB_NAME: app
-    #         MAILER_HOST: ${API_MAILER_HOST}
-    #         MAILER_PORT: ${API_MAILER_PORT}
-    #         MAILER_USER: ${API_MAILER_USER}
-    #         MAILER_PASSWORD: ${API_MAILER_PASSWORD}
-    #         MAILER_ENCRYPTION: tls
-    #         MAILER_FROM_EMAIL: ${API_MAILER_FROM_EMAIL}
-    #         FRONTEND_URL: https://demo-auction.deworker.pro
-    #         SENTRY_DSN: ${SENTRY_DSN}
-    #         JWT_ENCRYPTION_KEY: ${JWT_ENCRYPTION_KEY}
-    #         JWT_PUBLIC_KEY_PATH: /run/secrets/jwt_public_key
-    #         JWT_PRIVATE_KEY_PATH: /run/secrets/jwt_private_key
-    #     secrets:
-    #         - jwt_public_key
-    #         - jwt_private_key
-    #     command: sh -c 'wait-for-it api-postgres:5432 -t 60 && php bin/app.php migrations:migrate --no-interaction' #  как сделать запуск миграций
-    #     deploy:
-    #         restart_policy:
-    #             condition: on-failure
-    #             delay: 5s
-    #             max_attempts: 5
-    #             window: 120s
     db:
         image: ${REGISTRY}/${LOGIN}/auction-db:${IMAGE_TAG}
         environment:
@@ -117,11 +76,10 @@ services:
             update_config:
                 parallelism: 1
                 delay: 5s
-
-#volumes:
-#    db:
-
-    #secrets:
-#    sentry_dsn:
-#        file: ./secrets/sentry_dsn.txt
-
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 5
+                window: 120s
+            placement:
+                constraints: [node.role == manager]

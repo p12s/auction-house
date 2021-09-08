@@ -1,10 +1,6 @@
-.PHONY:
-.SILENT:
-.DEFAULT_GOAL := test
-
 # Go - директивы работы с папкой API
 go-build:
-	go mod download && go build api/main.go
+	cd api && go mod download && go build main.go && rm main && cd ..
 
 test:
 	go test --short -coverprofile=cover.out -v ./...
@@ -22,97 +18,10 @@ swag:
 lint:
 	golangci-lint run
 
-
-dc-init: dc-clear dc-pull dc-build dc-up # команда для первоначального запуска в системе
-dc-reup: dc-down dc-build dc-up
-dc-up:
-	docker-compose --env-file ./.env up -d
-dc-down:
-	docker-compose --env-file ./.env down --remove-orphans # будет останавливать все контейнеры с префиксом (default - название папки, .env - COMPOSE_PROJECT_NAME), даже если что-то по-ошибке удалено из docker-compose
-dc-clear:
-	docker-compose --env-file ./.env down -v --remove-orphans # полная очистка с удалением volumes
-dc-pull:
-	docker-compose --env-file ./.env pull
-dc-build:
-	docker-compose --env-file ./.env build
-
-api-clear:
-	docker run --rm -v ${PWD}/api:/app -w /app alpine sh -c 'rm -rf var/cache/* var/log/* var/test/*'
-
-api-init: api-permissions api-composer-install api-wait-db api-migrations api-fixtures
-
-api-permissions:
-	docker run --rm -v ${PWD}/api:/app -w /app alpine chmod 777 var/cache var/log var/test
-
-#api-wait-db:
-#	docker-compose run --rm api-php-cli wait-for-it api-postgres:5432 -t 30
-#api-migrations:
-#	docker-compose run --rm api-php-cli composer app migrations:migrate -- --no-interaction
-#api-fixtures:
-#	docker-compose run --rm api-php-cli composer app fixtures:load
-#api-check: api-validate-schema api-lint api-analyze api-test
-#api-validate-schema:
-#	docker-compose run --rm api-php-cli composer app orm:validate-schema
-#api-lint:
-#	docker-compose run --rm api-php-cli composer lint
-#	docker-compose run --rm api-php-cli composer php-cs-fixer fix -- --dry-run --diff
-#api-cs-fix:
-#	docker-compose run --rm api-php-cli composer php-cs-fixer fix
-#api-analyze:
-#	docker-compose run --rm api-php-cli composer psalm -- --no-diff
-#api-analyze-diff:
-#	docker-compose run --rm api-php-cli composer psalm
-
-api-test:
-	docker-compose run --rm api-php-cli composer test
-
-api-test-coverage:
-	docker-compose run --rm api-php-cli composer test-coverage
-
-api-test-unit:
-	docker-compose run --rm api-php-cli composer test -- --testsuite=unit
-
-api-test-unit-coverage:
-	docker-compose run --rm api-php-cli composer test-coverage -- --testsuite=unit
-
-api-test-functional:
-	docker-compose run --rm api-php-cli composer test -- --testsuite=functional
-
-api-test-functional-coverage:
-	docker-compose run --rm api-php-cli composer test-coverage -- --testsuite=functional
-
-frontend-clear:
-	docker run --rm -v ${PWD}/frontend:/app -w /app alpine sh -c 'rm -rf .ready build'
-
-frontend-init: frontend-yarn-install
-
-frontend-yarn-install:
-	docker-compose run --rm frontend-node-cli yarn install
-
-frontend-yarn-upgrade:
-	docker-compose run --rm frontend-node-cli yarn upgrade
-
-frontend-ready:
-	docker run --rm -v ${PWD}/frontend:/app -w /app alpine touch .ready
-
-frontend-check: frontend-lint frontend-test
-
-frontend-lint:
-	docker-compose run --rm frontend-node-cli yarn eslint
-	docker-compose run --rm frontend-node-cli yarn stylelint
-
-frontend-eslint-fix:
-	docker-compose run --rm frontend-node-cli yarn eslint-fix
-
-frontend-pretty:
-	docker-compose run --rm frontend-node-cli yarn prettier
-
-frontend-test:
-	docker-compose run --rm frontend-node-cli yarn test --watchAll=false
-
-frontend-test-watch:
-	docker-compose run --rm frontend-node-cli yarn test
-
+recompose:
+	docker-compose down --remove-orphans
+	docker rmi auction-house_api:latest
+	docker-compose up -d
 
 # ========================== BUILD DEVELOPMENT DOCKER IMAGES 
 dev-build-gateway:
@@ -181,18 +90,18 @@ try-push-prod:
 
 # ========================== DEPLOY PROD
 deploy-prod:
-	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'rm -rf site_${IMAGE_TAG}'
-	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'mkdir site_${IMAGE_TAG}'
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'rm -rf site_${VERSION}'
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'mkdir site_${VERSION}'
 
 	envsubst < docker-compose-production.yml > docker-compose-production-env.yml
-	scp -o StrictHostKeyChecking=no -P ${PORT} docker-compose-production-env.yml deploy@${HOST}:site_${IMAGE_TAG}/docker-compose.yml
+	scp -o StrictHostKeyChecking=no -P ${PORT} docker-compose-production-env.yml deploy@${HOST}:site_${VERSION}/docker-compose.yml
 	rm -f docker-compose-production-env.yml
 
-	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'mkdir site_${IMAGE_TAG}/secrets'
-#	scp -o StrictHostKeyChecking=no -P ${PORT} ${JWT_PUBLIC_KEY} deploy@${HOST}:site_${IMAGE_TAG}/secrets/jwt_public.key
-#	scp -o StrictHostKeyChecking=no -P ${PORT} ${JWT_PRIVATE_KEY} deploy@${HOST}:site_${IMAGE_TAG}/secrets/jwt_private.key
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'mkdir site_${VERSION}/secrets'
+#	scp -o StrictHostKeyChecking=no -P ${PORT} ${JWT_PUBLIC_KEY} deploy@${HOST}:site_${VERSION}/secrets/jwt_public.key
+#	scp -o StrictHostKeyChecking=no -P ${PORT} ${JWT_PRIVATE_KEY} deploy@${HOST}:site_${VERSION}/secrets/jwt_private.key
 
-	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'cd site_${IMAGE_TAG} && docker stack deploy --compose-file docker-compose.yml auction --with-registry-auth --prune'
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'cd site_${VERSION} && docker stack deploy --compose-file docker-compose.yml auction --with-registry-auth --prune'
 
 deploy-prod-clean:
 	rm -f docker-compose-production-env.yml

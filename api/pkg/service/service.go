@@ -13,12 +13,19 @@ type Authorization interface {
 	ParseToken(token string) (int, error)
 }
 
+type Lot interface {
+	GetAll() ([]common.Lot, error)
+	GetById(lotId string) (common.Lot, error)
+}
+
 type Service struct {
 	Authorization
+	Lot
 }
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization),
+		Lot:           NewLotService(repos.Lot),
 	}
 }

@@ -32,10 +32,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		// TODO смена пароля/мейла
 	}
 
-	role := router.Group("/role")
+	lot := router.Group("/lot") // идентификация не нужна, чтобы незарегистрированные посетители могли просматривать лоты
 	{
-		role.PUT("/change", h.health)
-		// TODO смена роли польз.
+		lot.GET("/", h.getAllLots)
+		lot.GET("/:id", h.getLotById)
 	}
 
 	api := router.Group("/api", h.userIdentity) // TODO without /api

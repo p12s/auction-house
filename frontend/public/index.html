@@ -1,58 +1,14 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="style.css">
-    <title>Auction is awesome!</title>
-</head>
-<body>
-    <div id="app" class="app">
-        <h1>💩💩💩</h1>
-        <button id="button" class="button">Click me to check API connection</button>
-        <h2 id="result">😴</h2>
-
-        <script>
-          function checkApiConnection() {
-            document.getElementById('result').innerHTML = '';
-
-            const Http = new XMLHttpRequest();
-            Http.upload.addEventListener("error", transferFailed, false);
-
-            Http.onreadystatechange = function(){
-              if (Http.readyState === 4){
-                let resultTag = document.getElementById('result');
-                if(Http.status === 200) {
-                  resultTag.appendChild(document.createTextNode('Shit say 👏🏿👏🏿👏🏿: '+Http.response));
-                } else {
-                  resultTag.appendChild(document.createTextNode('This shit dosn\'t work 👎🏿'));
-                }
-              } 
-            }
-            apiHref = document.location.protocol + '//'+ document.location.host + '/api' + '/health'
-            Http.open('GET', apiHref, true);
-            Http.send();
-          }
-
-          function transferFailed() {
-            console.log('fail')
-          }
-
-          function clearStatus() {
-            document.getElementById('result').innerHTML = '😴';
-          }
-
-          let button = document.getElementById("button");
-          button.addEventListener("click",function(e){
-            checkApiConnection();
-            setTimeout(function () {
-              clearStatus();
-            }, 3000);
-          },false);
-        </script>
-    </div>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Web site created using create-react-app" />
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
 </html>
