@@ -17,7 +17,9 @@
 IMAGE_TAG=dev REGISTRY=ghcr.io LOGIN=p12s make try-dev-build
 IMAGE_TAG=dev REGISTRY=ghcr.io LOGIN=p12s make try-dev-deploy
 ```
-
+![home](https://github.com/p12s/auction-house/blob/master/home.png?raw=true)    
+![detail](https://github.com/p12s/auction-house/blob/master/detail.png?raw=true)    
+  
 ## Реализовать функциональные возможности
 - ❌ Автоматическое обновление новых цен у всех пользователей в браузере
 - ❌ Постановка заявок в очередь
